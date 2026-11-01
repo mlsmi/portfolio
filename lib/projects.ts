@@ -41,6 +41,18 @@ export const PROJECTS: Project[] = [
     youtubeId: "jlMZbIT5BWo",
   },
   {
+    slug: "aiwizard",
+    name: "aiwizard",
+    pitch: "AI tools directory where listings are researched, written and fact-checked by an LLM pipeline.",
+    url: "https://www.aiwizard.ai",
+    metrics: [
+      { value: "10,000+", label: "tools reviewed and categorized" },
+      { value: "1,000+", label: "categories, fully prerendered on every build" },
+    ],
+    stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude"],
+    lead: true,
+  },
+  {
     slug: "agi",
     name: "Alien Goats Invasion",
     pitch:
@@ -51,18 +63,6 @@ export const PROJECTS: Project[] = [
       { value: "On-chain", label: "mints and claims auto-posted to X and Telegram" },
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "Solana", "Metaplex", "Drizzle", "Neon", "Redis"],
-    lead: true,
-  },
-  {
-    slug: "aiwizard",
-    name: "aiwizard",
-    pitch: "AI tools directory where listings are researched, written and fact-checked by an LLM pipeline.",
-    url: "https://www.aiwizard.ai",
-    metrics: [
-      { value: "10,000+", label: "tools reviewed and categorized" },
-      { value: "1,000+", label: "categories, fully prerendered on every build" },
-    ],
-    stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude"],
   },
   {
     slug: "buybitcoinsmart",
