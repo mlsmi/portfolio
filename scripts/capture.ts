@@ -19,12 +19,14 @@ const EXECUTABLE = "/opt/pw-browsers/chromium-1243/chrome-linux64/chrome";
 const OUT_DIR = process.argv[2] && !process.argv[2].startsWith("--") ? process.argv[2] : "public/projects";
 const ONLY = process.argv.find((a) => a.startsWith("--only="))?.slice(7).split(",");
 
-const SITES: Array<{ slug: string; url: string; blurImages?: boolean }> = [
+const SITES: Array<{ slug: string; url: string; blurImages?: boolean; dark?: boolean }> = [
   { slug: "marsrally", url: "https://marsrallychampionship.com" },
   { slug: "agi", url: "https://www.aliengoatsinvasion.com" },
-  { slug: "aiwizard", url: "https://www.aiwizard.ai" },
-  { slug: "buybitcoinsmart", url: "https://www.buybitcoinsmart.com" },
-  { slug: "airdropstop", url: "https://www.airdropstop.com" },
+  // dark: sets prefers-color-scheme AND localStorage theme="dark" (all
+  // three sites read one or the other before paint).
+  { slug: "aiwizard", url: "https://www.aiwizard.ai", dark: true },
+  { slug: "buybitcoinsmart", url: "https://www.buybitcoinsmart.com", dark: true },
+  { slug: "airdropstop", url: "https://www.airdropstop.com", dark: true },
   // Adult-adjacent imagery: blur photos so the portfolio stays SFW.
   { slug: "aiangels", url: "https://www.aiangels.io", blurImages: true },
   { slug: "ilusalong24", url: "https://ilusalong24.ee" },
@@ -79,16 +81,26 @@ function toWebp(pngPath: string, webpPath: string) {
 
 async function captureSite(
   browser: Browser,
-  { slug, url, blurImages }: { slug: string; url: string; blurImages?: boolean },
+  { slug, url, blurImages, dark }: { slug: string; url: string; blurImages?: boolean; dark?: boolean },
   tmp: string,
 ) {
   const context = await browser.newContext({
     viewport: { width: 1600, height: 1000 },
     deviceScaleFactor: 2,
+    colorScheme: dark ? "dark" : "light",
     ignoreHTTPSErrors: true, // the agent proxy re-signs TLS
     ...(process.env.HTTPS_PROXY ? { proxy: { server: process.env.HTTPS_PROXY } } : {}),
   });
   const page = await context.newPage();
+  if (dark) {
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("theme", "dark");
+      } catch {
+        // storage unavailable: the color-scheme emulation still applies
+      }
+    });
+  }
   console.log(`${slug}: ${url}`);
   await page.goto(url, { waitUntil: "networkidle", timeout: 60000 }).catch(async () => {
     // networkidle can hang on long-polling sites; settle for load.
