@@ -89,7 +89,7 @@ export function ContributionHeatmap({ days }: { days: ContributionDay[] }) {
         <svg
         viewBox={`0 0 ${width} ${height}`}
         width="100%"
-        style={{ minWidth: width, maxWidth: width }}
+        style={{ minWidth: width }}
         role="img"
         aria-label="Calendar of daily GitHub contributions over the last year"
         shapeRendering="crispEdges"

@@ -11,10 +11,28 @@ function shortDate(iso: string): string {
   return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
 }
 
-function StatTile({ value, label, sub }: { value: string; label: string; sub?: string }) {
+function StatTile({
+  value,
+  label,
+  sub,
+  headline,
+}: {
+  value: string;
+  label: string;
+  sub?: string;
+  headline?: boolean;
+}) {
   return (
-    <div className="border-t border-line pt-4">
-      <p className="nums text-3xl text-ink sm:text-4xl">{value}</p>
+    <div
+      className={
+        headline
+          ? "col-span-2 border-t border-line-strong pt-4 md:col-span-3 lg:col-span-2"
+          : "border-t border-line pt-4"
+      }
+    >
+      <p className={`nums ${headline ? "text-5xl text-accent sm:text-6xl" : "text-3xl text-ink sm:text-4xl"}`}>
+        {value}
+      </p>
       <p className="mt-2 text-sm leading-snug text-muted">{label}</p>
       {sub ? <p className="mt-1 font-mono text-xs text-faint">{sub}</p> : null}
     </div>
@@ -34,10 +52,11 @@ export function GithubActivity({ activity }: { activity: ActivityResult }) {
       <h2 id="activity-heading" className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
         Always shipping
       </h2>
-      <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 lg:grid-cols-6">
+      <div className="reveal mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 lg:grid-cols-7">
         <StatTile
           value={data.totalLastYear.toLocaleString("en-US")}
           label="contributions in the last year"
+          headline
         />
         <StatTile value={String(Math.round(avg))} label="contributions per day, on average" />
         <StatTile
@@ -53,7 +72,7 @@ export function GithubActivity({ activity }: { activity: ActivityResult }) {
         <StatTile value={String(years)} label="years on GitHub" />
         <StatTile value={String(PROJECTS.length)} label="products in production" />
       </div>
-      <div className="mt-14 border border-line bg-surface p-4 sm:p-6">
+      <div className="reveal mt-14 border border-line bg-surface p-4 sm:p-6">
         <ContributionHeatmap days={data.days} />
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="font-mono text-[11px] text-faint">
