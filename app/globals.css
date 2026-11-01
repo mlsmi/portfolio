@@ -1,11 +1,136 @@
 @import "tailwindcss";
 
+/*
+ * Mission-control design tokens. One locked dark theme (the page never
+ * inverts), one accent (hologram cyan), cool slate neutrals on a deep
+ * space near-black. Components style against the semantic tokens below,
+ * never raw palette values. Corner system: sharp (radius 0) everywhere.
+ */
 :root {
-  --bg: #06080d;
-  --ink: #e8edf5;
+  color-scheme: dark;
+
+  --bg: #05070d;
+  --surface: #090d16;
+  --raised: #0d1322;
+  --line: rgb(148 163 184 / 0.13);
+  --line-strong: rgb(148 163 184 / 0.28);
+
+  --ink: #e7edf6;
+  --muted: #93a1b5;
+  --faint: #5e6b80;
+
+  --accent: #67e0f4;
+  --accent-dim: #3ba8bd;
+  --accent-soft: rgb(103 224 244 / 0.09);
+  --on-accent: #041014;
+
+  --ok: #67e0f4;
+  --error: #f2889b;
+
+  /* Heatmap intensity scale: alpha steps of the one accent. */
+  --heat-0: rgb(148 163 184 / 0.08);
+  --heat-1: rgb(103 224 244 / 0.22);
+  --heat-2: rgb(103 224 244 / 0.42);
+  --heat-3: rgb(103 224 244 / 0.68);
+  --heat-4: #67e0f4;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-error: var(--error);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius: 0px;
 }
 
 body {
   background: var(--bg);
   color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Small uppercase mono label. Rationed: at most two per page (see skill). */
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* Stretched link: the anchor wraps the card name; its ::after covers the
+   whole card, so the card is the hit area while the name stays the anchor
+   text for crawlers and screen readers. */
+@utility card-link {
+  color: inherit;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  &:focus-visible::after {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+}
+
+/* Mono figures with tabular spacing, for stat values and metric pairs. */
+@utility nums {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Load-in cascade: fade-up, staggered via --enter-i, motion-gated. */
+@utility enter {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--enter-i, 0) * 90ms);
+  }
+
+  @keyframes enter-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
