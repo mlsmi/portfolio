@@ -11,8 +11,8 @@ export function ProjectsSection() {
         Selected work
       </h2>
       <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted">
-        Eight products in production. Every one designed, built, deployed and
-        operated by me.
+        Eight products in production. Six built solo, end to end. AI Angels and
+        its studio: lead developer in a three-person team.
       </p>
       <div className="mt-12 space-y-6">
         {leads.map((project, i) => (

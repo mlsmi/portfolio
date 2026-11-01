@@ -45,12 +45,13 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
           {project.url ? host(project.url) : "internal"}
         </span>
       </div>
+      {project.role ? <p className="mt-1.5 font-mono text-xs text-accent-dim">{project.role}</p> : null}
       <p className="mt-2 text-sm leading-relaxed text-muted">{project.pitch}</p>
       <dl className="mt-5 space-y-2">
         {project.metrics.map((metric) => (
           <div key={metric.label} className="flex items-baseline gap-3">
             <dt className="sr-only">{metric.label}</dt>
-            <dd className="nums min-w-16 shrink-0 text-sm text-accent">{metric.value}</dd>
+            <dd className="nums min-w-20 shrink-0 text-sm text-accent">{metric.value}</dd>
             <dd className="text-sm text-muted">{metric.label}</dd>
           </div>
         ))}

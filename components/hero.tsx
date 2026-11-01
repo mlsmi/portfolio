@@ -19,11 +19,12 @@ export function Hero() {
           </span>
         </h1>
         <p
-          className="enter mt-6 max-w-[52ch] text-base leading-relaxed text-muted sm:text-lg"
+          className="enter mt-6 max-w-[58ch] text-base leading-relaxed text-muted sm:text-lg"
           style={{ "--enter-i": 2 } as React.CSSProperties}
         >
-          I design, build and run production web products end to end: games,
-          directories and AI pipelines, shipped solo.
+          I ship full-stack products with agentic AI: customer apps, admin
+          platforms, LLM pipelines and 3D games. Then I rank them on search
+          engines and LLMs so people find them.
         </p>
         <div className="enter mt-10 flex flex-wrap gap-4" style={{ "--enter-i": 3 } as React.CSSProperties}>
           <a

@@ -1,9 +1,9 @@
 export const SITE = {
   name: "Meelis Mikiver",
   handle: "mlsmi",
-  role: "Full-Stack Developer & Product Builder",
+  role: "Full-Stack AI Engineer & SEO Specialist",
   description:
-    "Full-stack developer and product builder. 14,000+ GitHub contributions in the last year across eight production products: games, directories and AI pipelines, designed, built and run solo.",
+    "Full-stack AI engineer and SEO specialist. Ships customer apps, admin platforms, LLM pipelines and games with agentic AI, then ranks them: 130k+ pages indexed, ~4,000 Google clicks a day.",
   githubUrl: "https://github.com/mlsmi",
   linkedinUrl: "https://ee.linkedin.com/in/meelismikiver",
   /** GitHub account creation date, for the years-on-GitHub stat. */

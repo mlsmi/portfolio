@@ -10,6 +10,8 @@ export type Project = {
   /** 2-3 headline metrics, mono value + short label. */
   metrics: ProjectMetric[];
   stack: string[];
+  /** Set for team projects, shown under the name; absent means solo. */
+  role?: string;
   /** Lead projects render large with a video slot. */
   lead?: boolean;
   /** Gameplay video: click-to-play YouTube embed over the screenshot. */
@@ -70,9 +72,9 @@ export const PROJECTS: Project[] = [
     pitch: "How to buy bitcoin in every country on earth, in ten languages, with a Claude-powered assistant.",
     url: "https://www.buybitcoinsmart.com",
     metrics: [
-      { value: "232", label: "country guides" },
-      { value: "10", label: "languages, translated by refuter-checked LLM pipelines" },
-      { value: "10,500", label: "static pages per build" },
+      { value: "50,000", label: "programmatic pages in 10 languages" },
+      { value: "232", label: "country guides, translated by refuter-checked LLM pipelines" },
+      { value: "~140/day", label: "Google clicks three months after relaunch, zero paid SEO" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "Claude", "i18n"],
   },
@@ -91,13 +93,16 @@ export const PROJECTS: Project[] = [
   {
     slug: "aiangels",
     name: "AI Angels",
-    pitch: "AI companion platform running as both a website and a Telegram Mini App, paid in Stars and TON.",
+    pitch:
+      "AI companion platform on the web and Telegram, with a bot per companion, voice calls and streaming chat across 96 languages.",
     url: "https://www.aiangels.io",
+    role: "Lead developer, 3-person team",
     metrics: [
-      { value: "96", label: "locale catalogs" },
-      { value: "2", label: "payment rails: Telegram Stars and TON" },
+      { value: "132,000", label: "pages indexed by Google" },
+      { value: "~4,000", label: "Google clicks a day" },
+      { value: "96", label: "locales of programmatic landing pages" },
     ],
-    stack: ["Next.js", "Telegram Mini Apps", "Prisma", "Supabase", "AI SDK", "Deepgram", "TON"],
+    stack: ["Next.js", "Supabase", "Prisma", "Vercel AI SDK", "xAI Grok", "Deepgram", "Telegram bots"],
   },
   {
     slug: "aiangels-admin",
@@ -105,9 +110,10 @@ export const PROJECTS: Project[] = [
     pitch:
       "Internal AI image studio that keeps generated characters visually consistent across providers and scenes.",
     url: null,
+    role: "Lead developer, 3-person team",
     metrics: [
+      { value: "477", label: "admin API routes and 16 crons" },
       { value: "1,844", label: "images across 35 consistent characters" },
-      { value: "76", label: "admin API route groups" },
     ],
     stack: ["Next.js", "Seedream", "Supabase", "ffmpeg", "deck.gl"],
   },
