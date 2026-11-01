@@ -53,8 +53,9 @@ npm run smoke       # 16 checks against http://localhost:3000
   (aiwizard, buybitcoinsmart and airdropstop in dark mode; aiangels with
   imagery blurred for SFW); `scripts/render-mocks.ts` renders the
   admin-card and OG mocks. Review every capture by eye before committing.
-- The two game cards take an optional `videoSrc` (short muted MP4 loop)
-  in `lib/projects.ts`; the screenshot stays as poster.
+- The game cards take an optional `youtubeId` in `lib/projects.ts`:
+  click-to-play lite embed (`components/demo-video.tsx`) over the
+  screenshot; the CSP's `frame-src` allows only youtube-nocookie.com.
 - Contact form sends only when `RESEND_API_KEY` + `CONTACT_TO_EMAIL` are
   set on Vercel; without them it answers 503 by design. Never make it
   fake success.

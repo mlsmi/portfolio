@@ -12,8 +12,8 @@ export type Project = {
   stack: string[];
   /** Lead projects render large with a video slot. */
   lead?: boolean;
-  /** Optional muted autoplay loop; falls back to the screenshot. */
-  videoSrc?: string;
+  /** Gameplay video: click-to-play YouTube embed over the screenshot. */
+  youtubeId?: string;
 };
 
 export function projectImage(slug: string): string {
@@ -38,6 +38,7 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "WebCodecs", "Supabase", "Solana"],
     lead: true,
+    youtubeId: "jlMZbIT5BWo",
   },
   {
     slug: "agi",
