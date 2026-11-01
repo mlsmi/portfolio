@@ -97,7 +97,7 @@ export const PROJECTS: Project[] = [
       { value: "96", label: "locale catalogs" },
       { value: "2", label: "payment rails: Telegram Stars and TON" },
     ],
-    stack: ["Next.js", "Prisma", "Supabase", "AI SDK", "Deepgram", "TON"],
+    stack: ["Next.js", "Telegram Mini Apps", "Prisma", "Supabase", "AI SDK", "Deepgram", "TON"],
   },
   {
     slug: "aiangels-admin",

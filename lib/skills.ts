@@ -18,8 +18,16 @@ export const SKILL_GROUPS: SkillGroup[] = [
     items: ["Claude API & Agent SDK", "DeepSeek", "Vercel AI SDK", "Firecrawl", "LLM pipeline design", "Prompt & eval discipline"],
   },
   {
-    name: "Web3",
-    items: ["Solana web3.js", "Metaplex NFTs", "Wallet auth (ed25519)", "TON payments", "On-chain event processing"],
+    name: "Web3 & Telegram",
+    items: [
+      "Telegram Mini Apps",
+      "Telegram bots (Bot API)",
+      "Telegram Stars & TON payments",
+      "Solana web3.js",
+      "Metaplex NFTs",
+      "Wallet auth (ed25519)",
+      "On-chain event processing",
+    ],
   },
   {
     name: "Platform & Ops",
