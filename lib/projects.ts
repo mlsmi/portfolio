@@ -58,8 +58,8 @@ export const PROJECTS: Project[] = [
     pitch: "AI tools directory where listings are researched, written and fact-checked by an LLM pipeline.",
     url: "https://www.aiwizard.ai",
     metrics: [
-      { value: "5,700+", label: "tools reviewed and categorized" },
-      { value: "12,000", label: "pages, fully prerendered on every build" },
+      { value: "10,000+", label: "tools reviewed and categorized" },
+      { value: "1,000+", label: "categories, fully prerendered on every build" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude"],
   },
@@ -116,7 +116,7 @@ export const PROJECTS: Project[] = [
     pitch: "Estonia's beauty clinic directory, prerendered in four languages with hand-tuned grammar for each.",
     url: "https://ilusalong24.ee",
     metrics: [
-      { value: "~800", label: "clinics across 10 service categories" },
+      { value: "400+", label: "editor-checked salons across 10 service categories" },
       { value: "4", label: "languages with hand-authored place-name grammar" },
       { value: "9,600", label: "routes prerendered per build" },
     ],

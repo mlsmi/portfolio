@@ -22,7 +22,15 @@ async function main() {
   ] as const) {
     const page = await browser.newPage({ viewport: { width, height } });
     await page.goto(url, { waitUntil: "networkidle" });
-    await page.waitForTimeout(1200);
+    // Walk the page so lazy images load before the full-page capture.
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 600) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      window.scrollTo(0, 0);
+    });
+    await page.waitForTimeout(1500);
     await page.screenshot({ path: path.join(outDir, `${name}.png`), fullPage: true });
     await page.close();
   }

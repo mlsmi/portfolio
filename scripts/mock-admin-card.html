@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #05070d; --surface: #090d16; --raised: #0d1322;
+    --line: rgba(148,163,184,.13); --line-strong: rgba(148,163,184,.28);
+    --ink: #e7edf6; --muted: #93a1b5; --faint: #5e6b80; --accent: #67e0f4;
+  }
+  * { margin: 0; box-sizing: border-box; }
+  body {
+    width: 1600px; height: 1000px; background: var(--bg);
+    font-family: ui-sans-serif, system-ui, sans-serif; color: var(--ink);
+    display: grid; place-items: center; position: relative; overflow: hidden;
+  }
+  .star { position: absolute; background: #cfe4ef; }
+  .panel {
+    width: 980px; border: 1px solid var(--line-strong); background: var(--surface);
+    padding: 72px 80px;
+  }
+  .label {
+    font-family: ui-monospace, monospace; font-size: 20px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  h1 { margin-top: 28px; font-size: 64px; letter-spacing: -0.03em; }
+  p.sub { margin-top: 20px; font-size: 26px; line-height: 1.5; color: var(--muted); max-width: 30ch; }
+  .stats { margin-top: 56px; display: flex; gap: 64px; }
+  .stat { border-top: 1px solid var(--line); padding-top: 20px; }
+  .stat b { display: block; font-family: ui-monospace, monospace; font-weight: 400; font-size: 44px; }
+  .stat span { display: block; margin-top: 10px; font-size: 20px; color: var(--faint); }
+</style>
+</head>
+<body>
+  <div class="star" style="left:8%;top:14%;width:3px;height:3px;opacity:.5"></div>
+  <div class="star" style="left:22%;top:78%;width:2px;height:2px;opacity:.35"></div>
+  <div class="star" style="left:71%;top:10%;width:2px;height:2px;opacity:.4"></div>
+  <div class="star" style="left:88%;top:62%;width:3px;height:3px;opacity:.5"></div>
+  <div class="star" style="left:54%;top:88%;width:2px;height:2px;opacity:.3"></div>
+  <div class="star" style="left:38%;top:6%;width:2px;height:2px;opacity:.35"></div>
+  <div class="panel">
+    <span class="label">Internal system · no public access</span>
+    <h1>AI Angels Studio</h1>
+    <p class="sub">Operator console for character-consistent AI image generation.</p>
+    <div class="stats">
+      <div class="stat"><b>1,844</b><span>images generated</span></div>
+      <div class="stat"><b>35</b><span>consistent characters</span></div>
+      <div class="stat"><b>76</b><span>admin API route groups</span></div>
+    </div>
+  </div>
+</body>
+</html>
