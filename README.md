@@ -53,10 +53,11 @@ per-instance sliding-window rate limit (5 requests / 10 minutes per IP).
   capture blurs imagery via injected CSS to stay safe for work; the admin
   dashboard card and `public/og.png` render from the local HTML mocks in
   `scripts/` via `scripts/render-mocks.ts`.
-- The two game cards (`marsrally`, `agi`) accept a `videoSrc` in
-  `lib/projects.ts`: a short muted MP4 loop that plays in place of the
-  screenshot (`components/project-video.tsx`), with the screenshot as
-  poster and a reduced-motion fallback.
+- The game cards (`marsrally`, `agi`) accept a `youtubeId` in
+  `lib/projects.ts`: the screenshot gets a "Play demo" button and the
+  YouTube iframe (privacy-enhanced youtube-nocookie.com) mounts only on
+  click (`components/demo-video.tsx`), so nothing loads from YouTube
+  until a visitor asks for it.
 
 ## Content
 

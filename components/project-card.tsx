@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ProjectVideo } from "@/components/project-video";
+import { DemoVideo } from "@/components/demo-video";
 import { projectImage, type Project } from "@/lib/projects";
 
 function host(url: string): string {
@@ -10,8 +10,8 @@ function host(url: string): string {
 function Media({ project, priority }: { project: Project; priority?: boolean }) {
   const image = projectImage(project.slug);
   const alt = `Screenshot of ${project.name}`;
-  if (project.videoSrc) {
-    return <ProjectVideo src={project.videoSrc} poster={image} alt={alt} />;
+  if (project.youtubeId) {
+    return <DemoVideo youtubeId={project.youtubeId} poster={image} name={project.name} priority={priority} />;
   }
   return (
     <Image

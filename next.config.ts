@@ -9,6 +9,8 @@ const ContentSecurityPolicy = [
   "media-src 'self'",
   "font-src 'self'",
   "connect-src 'self'",
+  // Click-to-play demo videos (components/demo-video.tsx).
+  "frame-src https://www.youtube-nocookie.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
