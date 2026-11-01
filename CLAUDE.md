@@ -21,10 +21,10 @@ Commits must be authored as **mlsmi**, never as a generic agent identity.
 projects") builds and deploys every commit that lands on it. Changes go:
 
 1. Commit on a feature branch and push it.
-2. Open a pull request against `main`.
-3. Merge the PR once the gate below is green.
-
-Never `git push origin main`, not even a fast-forward.
+2. Open a pull request against `main`, with the gate below green.
+3. **Stop there. The owner merges PRs himself** (owner rule, 2026-11-01).
+   Never merge a PR, and never `git push origin main`, not even a
+   fast-forward.
 
 ## The gate (run before every PR)
 
