@@ -1,3 +1,4 @@
+import { HeatmapTooltip } from "@/components/heatmap-tooltip";
 import type { ContributionDay } from "@/lib/github/types";
 
 const CELL = 11;
@@ -7,6 +8,20 @@ const LEFT_GUTTER = 30;
 const TOP_GUTTER = 18;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS_FULL = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 const WEEKDAY_ROWS: Array<{ row: number; label: string }> = [
   { row: 1, label: "Mon" },
   { row: 3, label: "Wed" },
@@ -17,9 +32,19 @@ function utcDate(iso: string): Date {
   return new Date(`${iso}T00:00:00Z`);
 }
 
-function prettyDate(iso: string): string {
-  const d = utcDate(iso);
-  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+function ordinal(n: number): string {
+  if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`;
+  const suffix = { 1: "st", 2: "nd", 3: "rd" }[n % 10] ?? "th";
+  return `${n}${suffix}`;
+}
+
+/** GitHub's tooltip wording: "396 contributions on October 18th." */
+function tipText(day: ContributionDay): string {
+  const d = utcDate(day.date);
+  const when = `${MONTHS_FULL[d.getUTCMonth()]} ${ordinal(d.getUTCDate())}`;
+  if (day.count === 0) return `No contributions on ${when}.`;
+  if (day.count === 1) return `1 contribution on ${when}.`;
+  return `${day.count.toLocaleString("en-US")} contributions on ${when}.`;
 }
 
 type Cell = ContributionDay & { week: number; row: number };
@@ -39,7 +64,11 @@ export function ContributionHeatmap({ days }: { days: ContributionDay[] }) {
   });
   const weeks = cells[cells.length - 1].week + 1;
 
-  // One label where a month first appears, skipping crowded repeats.
+  const width = LEFT_GUTTER + weeks * PITCH - GAP;
+  const height = TOP_GUTTER + 7 * PITCH - GAP;
+
+  // One label where a month first appears, skipping crowded repeats and
+  // anything that would overhang the right edge.
   const monthLabels: Array<{ week: number; label: string }> = [];
   let lastMonth = -1;
   for (const cell of cells) {
@@ -47,18 +76,17 @@ export function ContributionHeatmap({ days }: { days: ContributionDay[] }) {
     if (m !== lastMonth) {
       lastMonth = m;
       const prev = monthLabels[monthLabels.length - 1];
-      if (!prev || cell.week - prev.week >= 3) {
+      const x = LEFT_GUTTER + cell.week * PITCH;
+      if ((!prev || cell.week - prev.week >= 3) && x + 22 <= width) {
         monthLabels.push({ week: cell.week, label: MONTHS[m] });
       }
     }
   }
 
-  const width = LEFT_GUTTER + weeks * PITCH - GAP;
-  const height = TOP_GUTTER + 7 * PITCH - GAP;
-
   return (
-    <div className="overflow-x-auto">
-      <svg
+    <HeatmapTooltip>
+      <div className="overflow-x-auto">
+        <svg
         viewBox={`0 0 ${width} ${height}`}
         width="100%"
         style={{ minWidth: width, maxWidth: width }}
@@ -94,12 +122,14 @@ export function ContributionHeatmap({ days }: { days: ContributionDay[] }) {
             width={CELL}
             height={CELL}
             fill={`var(--heat-${cell.level})`}
-          >
-            <title>{`${cell.count} contribution${cell.count === 1 ? "" : "s"} on ${prettyDate(cell.date)}`}</title>
-          </rect>
+            data-tip={tipText(cell)}
+            className="hover:stroke-[var(--accent)]"
+            strokeWidth={1}
+          />
         ))}
       </svg>
-    </div>
+      </div>
+    </HeatmapTooltip>
   );
 }
 
