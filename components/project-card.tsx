@@ -14,15 +14,17 @@ function Media({ project, priority }: { project: Project; priority?: boolean }) 
     return <DemoVideo youtubeId={project.youtubeId} poster={image} name={project.name} priority={priority} />;
   }
   return (
-    <Image
-      src={image}
-      alt={alt}
-      width={1600}
-      height={1000}
-      priority={priority}
-      sizes="(max-width: 768px) 100vw, 50vw"
-      className="aspect-[16/10] w-full object-cover"
-    />
+    <div className="overflow-hidden">
+      <Image
+        src={image}
+        alt={alt}
+        width={1600}
+        height={1000}
+        priority={priority}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+      />
+    </div>
   );
 }
 
@@ -68,13 +70,13 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
  * The whole card is the hit area via a stretched link on the name;
  * crawlers and screen readers get the name as anchor text.
  */
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ project, reverse }: { project: Project; reverse?: boolean }) {
   const interactive = Boolean(project.url);
   return (
     <article
-      className={`group relative flex flex-col overflow-hidden border border-line bg-surface transition-colors ${
+      className={`reveal group relative flex flex-col overflow-hidden border border-line bg-surface transition-colors ${
         interactive ? "hover:border-line-strong" : ""
-      } ${project.lead ? "md:flex-row" : ""}`}
+      } ${project.lead ? (reverse ? "md:flex-row-reverse" : "md:flex-row") : ""}`}
     >
       <div className={project.lead ? "md:w-3/5 md:shrink-0" : ""}>
         <Media project={project} priority={project.lead} />

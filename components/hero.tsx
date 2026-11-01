@@ -2,7 +2,8 @@ import { SITE } from "@/lib/site-config";
 
 export function Hero() {
   return (
-    <section id="top" className="flex min-h-[100dvh] items-center">
+    // 88dvh, not 100: the telemetry band peeks above the fold.
+    <section id="top" className="flex min-h-[88dvh] items-center">
       <div className="mx-auto w-full max-w-6xl px-4 pt-14 sm:px-6">
         <p className="mono-label enter flex items-center gap-2.5" style={{ "--enter-i": 0 } as React.CSSProperties}>
           {/* The page's one status dot: a real availability flag. */}

@@ -15,8 +15,8 @@ export function ProjectsSection() {
         operated by me.
       </p>
       <div className="mt-12 space-y-6">
-        {leads.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+        {leads.map((project, i) => (
+          <ProjectCard key={project.slug} project={project} reverse={i % 2 === 1} />
         ))}
       </div>
       <div className="mt-6 grid gap-6 md:grid-cols-2">
