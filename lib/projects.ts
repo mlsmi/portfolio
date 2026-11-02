@@ -14,6 +14,8 @@ export type Project = {
   contributions: { commits: number; prs: number };
   /** Set for team projects, shown under the name; absent means solo. */
   role?: string;
+  /** Natural image size when not 1600x1000; lead cards show it uncropped. */
+  imageSize?: { width: number; height: number };
   /** Optional capability list under the metrics, for integration depth. */
   highlights?: string[];
   /** Lead projects render large with a video slot. */
@@ -57,6 +59,7 @@ export const PROJECTS: Project[] = [
     pitch:
       "AI companion platform on the web and Telegram. I lead its engineering: architecture decisions, code reviews and a three-person team.",
     url: "https://www.aiangels.io",
+    imageSize: { width: 1600, height: 1122 },
     role: "Engineering lead, 3-person team",
     metrics: [
       { value: "566", label: "AI companions with streaming chat and voice, some with their own Telegram bot" },
@@ -96,6 +99,29 @@ export const PROJECTS: Project[] = [
     contributions: { commits: 788, prs: 249 },
   },
   {
+    slug: "aiwizard",
+    name: "aiwizard",
+    pitch:
+      "AI tools directory where an LLM pipeline researches, writes and fact-checks every listing, and tool owners verify themselves with an embedded badge.",
+    url: "https://www.aiwizard.ai",
+    metrics: [
+      { value: "10,000+", label: "tools reviewed and categorized" },
+      { value: "1,000+", label: "categories in a two-level tree" },
+      { value: "12,000", label: "pages prerendered on every build, no ISR" },
+    ],
+    highlights: [
+      "Badge verification: owners embed a badge, an automatic check confirms it (rendering JavaScript-built sites when needed), and a daily cron re-checks every verified tool; two misses unverify",
+      "Verified tools earn a followed link, a blue check and verified-first placement on every listing; owners claim listings with a personal code carried on the badge",
+      "Submit-a-tool pipeline: a submission waits for its badge, then an AI review job writes the listing and screenshots the site and its tutorial steps for admin review",
+      "Catalog pipeline: scrape, DeepSeek enrichment with Claude fallback, and import, with an originality gate that rejects any copied 10-word span",
+      "Semrush-driven category expansion: LLM assignment and fill passes grow a two-level tree of 1,000+ categories",
+      "Supabase security: RLS policies, column grants, SECURITY DEFINER RPCs and a moderation trigger guarding curation fields",
+    ],
+    stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude", "Firecrawl", "Vercel crons"],
+    lead: true,
+    contributions: { commits: 555, prs: 111 },
+  },
+  {
     slug: "agi",
     name: "Alien Goats Invasion",
     pitch:
@@ -126,18 +152,6 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "Claude", "i18n"],
     contributions: { commits: 2676, prs: 146 },
-  },
-  {
-    slug: "aiwizard",
-    name: "aiwizard",
-    pitch: "AI tools directory where listings are researched, written and fact-checked by an LLM pipeline.",
-    url: "https://www.aiwizard.ai",
-    metrics: [
-      { value: "10,000+", label: "tools reviewed and categorized" },
-      { value: "1,000+", label: "categories, fully prerendered on every build" },
-    ],
-    stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude"],
-    contributions: { commits: 555, prs: 111 },
   },
   {
     slug: "airdropstop",

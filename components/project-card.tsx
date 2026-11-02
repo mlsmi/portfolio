@@ -13,16 +13,21 @@ function Media({ project, priority }: { project: Project; priority?: boolean }) 
   if (project.youtubeId) {
     return <DemoVideo youtubeId={project.youtubeId} poster={image} name={project.name} priority={priority} />;
   }
+  const size = project.imageSize ?? { width: 1600, height: 1000 };
+  // Lead cards own their row, so their screenshot shows whole, uncropped.
+  // Grid cards share a uniform 16:10 frame so rows align; anchored to the
+  // top so the cropped part is never a site's header.
+  const fit = project.lead ? "h-auto" : "aspect-[16/10] object-cover object-top";
   return (
     <div className="overflow-hidden">
       <Image
         src={image}
         alt={alt}
-        width={1600}
-        height={1000}
+        width={size.width}
+        height={size.height}
         priority={priority}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        sizes="(max-width: 768px) 100vw, 60vw"
+        className={`w-full ${fit} transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100`}
       />
     </div>
   );
