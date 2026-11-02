@@ -3,7 +3,9 @@ import type { NextConfig } from "next";
 const ContentSecurityPolicy = [
   "default-src 'self'",
   // Next.js hydration and the inline JSON-LD block require inline scripts.
-  "script-src 'self' 'unsafe-inline'",
+  // Vercel Analytics loads same-origin (/_vercel/insights) in production;
+  // the allowed host serves only its local debug script.
+  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "media-src 'self'",
