@@ -782,3 +782,275 @@ html {
     stroke-dashoffset: 0;
   }
 }
+
+/* ---------------------------- Round 2 ---------------------------- */
+
+/* 3D Marquee monitor wall (components/hero-wall.tsx): a tilted grid of
+   the real project screenshots, columns drifting along the tilt. Only
+   transform animates; the images are muted so the wall stays ambient. */
+.wall {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 64%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 8%, #000 58%);
+}
+
+/* Sized to the grid's content (4 columns of 4 tiles), tilted about its
+   own centre, then scaled to sit in the hero's right side. */
+.wall-stage {
+  position: absolute;
+  top: 46%;
+  left: 58%;
+  width: 1696px;
+  height: 1096px;
+  transform: translate(-50%, -50%) scale(0.72);
+}
+
+.wall-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem;
+  transform: rotateX(55deg) rotateZ(-45deg);
+}
+
+.wall-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Dashed guide lines between columns and tiles (Aceternity's GridLine
+   helpers), fading out at both ends. */
+.wall-col::before,
+.wall-tile::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.wall-col::before {
+  top: -40px;
+  left: -1rem;
+  width: 1px;
+  height: calc(100% + 80px);
+  background: linear-gradient(to bottom, var(--line-strong) 50%, transparent 0) 0 0 / 1px 6px;
+  mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+}
+
+.wall-tile {
+  position: relative;
+  border: 1px solid rgb(103 224 244 / 0.16);
+  background: var(--surface);
+}
+
+.wall-tile::before {
+  top: -1rem;
+  left: -10px;
+  width: calc(100% + 20px);
+  height: 1px;
+  background: linear-gradient(to right, var(--line-strong) 50%, transparent 0) 0 0 / 6px 1px;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.wall-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(140deg, rgb(103 224 244 / 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.wall-tile img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  filter: saturate(0.6) brightness(0.72);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wall-col {
+    animation: wall-drift var(--wall-d, 12s) ease-in-out infinite alternate;
+  }
+}
+
+@keyframes wall-drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(var(--wall-y, 100px));
+  }
+}
+
+/* Text Flipping Board (components/flap-value.tsx): each digit sits on its
+   own split-flap tile; the flap animation itself runs through the Web
+   Animations API. */
+.flaps {
+  display: inline-flex;
+  gap: 0.08em;
+  perspective: 600px;
+}
+
+.flap {
+  position: relative;
+  display: inline-block;
+  padding: 0.04em 0.1em;
+  border: 1px solid var(--line);
+  background: linear-gradient(to bottom, var(--raised) 50%, #0b111e 50%);
+  line-height: 1.08;
+  text-align: center;
+}
+
+.flap::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 0.5px) 0 auto;
+  height: 1px;
+  background: rgb(5 7 13 / 0.85);
+}
+
+.flap-glyph {
+  display: inline-block;
+  transform-origin: 50% 0;
+  backface-visibility: hidden;
+}
+
+.flap-static {
+  padding-inline: 0.01em;
+  border-color: transparent;
+  background: none;
+}
+
+.flap-static::after {
+  display: none;
+}
+
+/* Heatmap boot sweep (components/heatmap-tooltip.tsx arms it): cells
+   power on week by week, flashing cyan before settling to their level.
+   Only armed with JS, motion allowed, and the panel still off screen. */
+[data-boot="armed"] rect[data-tip] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-boot="go"] rect[data-tip] {
+    animation: cell-boot 0.65s ease-out calc(var(--w, 0) * 14ms) both;
+  }
+}
+
+@keyframes cell-boot {
+  0% {
+    opacity: 0;
+    fill: var(--accent);
+  }
+  35% {
+    opacity: 1;
+    fill: var(--accent);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Navbar scroll progress: a cyan hairline along the floating bar's bottom
+   edge, filled by the page's scroll position. */
+.site-bar {
+  position: relative;
+}
+
+.site-bar::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  left: -1px;
+  height: 1px;
+  background: linear-gradient(to right, var(--accent-dim), var(--accent));
+  box-shadow: 0 0 8px rgb(103 224 244 / 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: opacity 0.4s;
+}
+
+[data-scrolled="true"] .site-bar::after {
+  opacity: 1;
+}
+
+@supports (animation-timeline: scroll()) {
+  .site-bar::after {
+    animation: progress-fill linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes progress-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Contact dot field (Hero Highlight's dot background): faint dots, and
+   cyan ones revealed around the cursor. GlowField writes --mx/--my and
+   --glow-hover on the section ([data-glow]). */
+.dot-field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgb(148 163 184 / 0.17) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, #000 35%, transparent 90%);
+}
+
+.dot-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--accent) 1.2px, transparent 1.7px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(240px circle at var(--mx, -999px) var(--my, -999px), #000, transparent 75%);
+  opacity: var(--glow-hover, 0);
+  transition: opacity 0.4s;
+}
+
+/* Stateful Button: spinner while sending, a check that draws itself on
+   success (components/contact-form.tsx). */
+.send-spinner {
+  width: 15px;
+  height: 15px;
+}
+
+.send-check path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .send-spinner {
+    animation: spin 0.7s linear infinite;
+  }
+
+  .send-check path {
+    animation: check-draw 0.5s cubic-bezier(0.65, 0, 0.35, 1) 0.15s both;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}

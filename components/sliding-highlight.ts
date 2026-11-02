@@ -12,19 +12,23 @@ import { useRef } from "react";
  *
  * The container must be the items' offsetParent (position: relative).
  * Arriving from outside, the highlight appears in place and fades in;
- * moving between items, it slides. Mouse and pen only.
+ * moving between items, it slides. Hover is mouse and pen only. `rest`
+ * gives it a home to glide back to when the pointer leaves (the navbar's
+ * current section).
  */
 export function useSlidingHighlight<T extends HTMLElement>(itemSelector: string) {
   const container = useRef<T>(null);
   const highlight = useRef<HTMLSpanElement>(null);
+  const resting = useRef<HTMLElement | null>(null);
+  const hovering = useRef(false);
 
-  const onPointerOver = (event: React.PointerEvent) => {
-    if (event.pointerType === "touch") return;
-    const root = container.current;
+  const place = (item: HTMLElement | null) => {
     const el = highlight.current;
-    const item = (event.target as Element).closest<HTMLElement>(itemSelector);
-    if (!root || !el || !item || !root.contains(item)) return;
-
+    if (!el) return;
+    if (!item) {
+      el.dataset.on = "false";
+      return;
+    }
     const arriving = el.dataset.on !== "true";
     if (arriving) el.style.transition = "none";
     el.style.transform = `translate(${item.offsetLeft}px, ${item.offsetTop}px)`;
@@ -37,9 +41,25 @@ export function useSlidingHighlight<T extends HTMLElement>(itemSelector: string)
     el.dataset.on = "true";
   };
 
-  const onPointerLeave = () => {
-    if (highlight.current) highlight.current.dataset.on = "false";
+  const onPointerOver = (event: React.PointerEvent) => {
+    if (event.pointerType === "touch") return;
+    const root = container.current;
+    const item = (event.target as Element).closest<HTMLElement>(itemSelector);
+    if (!root || !item || !root.contains(item)) return;
+    hovering.current = true;
+    place(item);
   };
 
-  return { container, highlight, onPointerOver, onPointerLeave };
+  const onPointerLeave = () => {
+    hovering.current = false;
+    place(resting.current);
+  };
+
+  /** Where the highlight sits when nothing is hovered (null: hidden). */
+  const rest = (item: HTMLElement | null) => {
+    resting.current = item;
+    if (!hovering.current) place(item);
+  };
+
+  return { container, highlight, onPointerOver, onPointerLeave, rest };
 }

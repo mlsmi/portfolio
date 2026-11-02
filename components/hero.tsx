@@ -1,11 +1,13 @@
 import { EncryptedText } from "@/components/encrypted-text";
+import { HeroWall } from "@/components/hero-wall";
 import { MovingBorderLink } from "@/components/moving-border-link";
 import { PointerHighlight } from "@/components/pointer-highlight";
 import { SITE } from "@/lib/site-config";
 
 /**
  * Spotlight New (two swaying cyan light cones) over a Grid Background
- * floor, both adapted from Aceternity UI as CSS (app/globals.css).
+ * floor and the 3D Marquee monitor wall, adapted from Aceternity UI as
+ * CSS (app/globals.css).
  * Contained in the hero's own stacking context, above the site-wide
  * falling drops and below the hero's content.
  */
@@ -13,6 +15,7 @@ function HeroBackdrop() {
   return (
     <div aria-hidden className="hero-backdrop pointer-events-none absolute inset-0 -z-10">
       <div className="hero-grid" />
+      <HeroWall />
       <div className="spotlight-arm spotlight-left">
         <span className="beam-1" />
         <span className="beam-2" />

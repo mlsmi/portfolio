@@ -65,8 +65,22 @@ export function ContactForm() {
 
   if (status === "sent") {
     return (
-      <div className="border border-line bg-surface p-6" role="status">
-        <p className="nums text-sm text-accent">Message received.</p>
+      <div role="status">
+        <p className="nums flex items-center gap-3 text-sm text-accent">
+          <span aria-hidden className="flex size-7 items-center justify-center border border-accent/40">
+            <svg viewBox="0 0 24 24" className="send-check size-4">
+              <path
+                d="M5 12.5l4.5 4.5L19 7.5"
+                pathLength={1}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="square"
+              />
+            </svg>
+          </span>
+          Message received.
+        </p>
         <p className="mt-2 text-sm leading-relaxed text-muted">
           Thanks for reaching out. I read everything and reply to real inquiries,
           usually within a day.
@@ -124,8 +138,15 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-6 bg-accent px-6 py-3 text-sm font-medium text-on-accent transition-transform hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+        className="mt-6 inline-flex items-center gap-2.5 bg-accent px-6 py-3 text-sm font-medium text-on-accent transition-transform hover:brightness-110 active:scale-[0.98] disabled:opacity-80"
       >
+        {/* Stateful Button (adapted from Aceternity UI): a spinner while the
+            request is out; success swaps the form for a drawn check. */}
+        {status === "submitting" ? (
+          <svg aria-hidden viewBox="0 0 24 24" className="send-spinner">
+            <path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          </svg>
+        ) : null}
         {status === "submitting" ? "Sending" : "Send message"}
       </button>
     </form>
