@@ -58,7 +58,19 @@ export function Hero() {
           I ship full-stack products with agentic AI: consumer apps, admin
           platforms, LLM pipelines and 3D games. Then I rank them on{" "}
           <PointerHighlight>search engines and LLMs</PointerHighlight> so
-          people find them.
+          people and{" "}
+          {/* "agents" reads as machine text: mono, cyan, a terminal caret,
+              and a decrypt once the pointer box has landed (and on hover). */}
+          <span className="whitespace-nowrap">
+            <EncryptedText
+              text="agents"
+              delayMs={3000}
+              replayOnHover
+              className="font-mono text-[0.95em] text-accent [text-shadow:0_0_18px_rgb(103_224_244/0.45)]"
+            />
+            <span aria-hidden className="term-cursor ml-0.5" style={{ width: "0.45em" }} />
+          </span>{" "}
+          find them.
         </p>
         <div className="enter mt-10 flex flex-wrap gap-4" style={{ "--enter-i": 3 } as React.CSSProperties}>
           <MovingBorderLink href="#work">View the work</MovingBorderLink>
