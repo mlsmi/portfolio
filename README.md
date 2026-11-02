@@ -50,7 +50,7 @@ per-instance sliding-window rate limit (5 requests / 10 minutes per IP).
 
 - `public/projects/*.webp` are real captures of the live sites, taken by
   `scripts/capture.ts` (1600x1000 at 2x, compressed to WebP). The AI Angels
-  capture blurs imagery via injected CSS to stay safe for work; the admin
+  image is an app screenshot supplied by the owner, not captured; the admin
   dashboard card and `public/og.png` render from the local HTML mocks in
   `scripts/` via `scripts/render-mocks.ts`.
 - The game cards (`marsrally`, `agi`) accept a `youtubeId` in

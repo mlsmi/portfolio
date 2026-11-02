@@ -19,7 +19,9 @@ const EXECUTABLE = "/opt/pw-browsers/chromium-1243/chrome-linux64/chrome";
 const OUT_DIR = process.argv[2] && !process.argv[2].startsWith("--") ? process.argv[2] : "public/projects";
 const ONLY = process.argv.find((a) => a.startsWith("--only="))?.slice(7).split(",");
 
-const SITES: Array<{ slug: string; url: string; blurImages?: boolean; dark?: boolean }> = [
+// aiangels is deliberately absent: its image is an owner-supplied app
+// screenshot (public/projects/aiangels.webp), never captured from the site.
+const SITES: Array<{ slug: string; url: string; dark?: boolean }> = [
   { slug: "marsrally", url: "https://marsrallychampionship.com" },
   { slug: "agi", url: "https://www.aliengoatsinvasion.com" },
   // dark: sets prefers-color-scheme AND localStorage theme="dark" (all
@@ -27,8 +29,6 @@ const SITES: Array<{ slug: string; url: string; blurImages?: boolean; dark?: boo
   { slug: "aiwizard", url: "https://www.aiwizard.ai", dark: true },
   { slug: "buybitcoinsmart", url: "https://www.buybitcoinsmart.com", dark: true },
   { slug: "airdropstop", url: "https://www.airdropstop.com", dark: true },
-  // Adult-adjacent imagery: blur photos so the portfolio stays SFW.
-  { slug: "aiangels", url: "https://www.aiangels.io", blurImages: true },
   { slug: "ilusalong24", url: "https://ilusalong24.ee" },
 ];
 
@@ -81,7 +81,7 @@ function toWebp(pngPath: string, webpPath: string) {
 
 async function captureSite(
   browser: Browser,
-  { slug, url, blurImages, dark }: { slug: string; url: string; blurImages?: boolean; dark?: boolean },
+  { slug, url, dark }: { slug: string; url: string; dark?: boolean },
   tmp: string,
 ) {
   const context = await browser.newContext({
@@ -108,15 +108,6 @@ async function captureSite(
   });
   await page.waitForTimeout(3000);
   await dismissOverlays(page);
-  if (blurImages) {
-    await page.addStyleTag({
-      content: [
-        "img, video, [style*='background-image'] { filter: blur(18px) !important; }",
-        "header img, nav img, aside img { filter: none !important; }",
-      ].join("\n"),
-    });
-    await page.waitForTimeout(300);
-  }
   // Transient toasts and consent banners don't belong in a still.
   await page.addStyleTag({
     content:

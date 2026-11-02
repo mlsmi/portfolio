@@ -56,6 +56,13 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
           </div>
         ))}
       </dl>
+      {project.highlights ? (
+        <ul className="mt-5 space-y-2 border-l border-line pl-4 text-sm leading-relaxed text-muted">
+          {project.highlights.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
       <div className="mt-auto pt-5">
         <p className="font-mono text-xs text-accent-dim">
           {project.contributions.commits.toLocaleString("en-US")} commits ·{" "}

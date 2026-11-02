@@ -14,6 +14,8 @@ export type Project = {
   contributions: { commits: number; prs: number };
   /** Set for team projects, shown under the name; absent means solo. */
   role?: string;
+  /** Optional capability list under the metrics, for integration depth. */
+  highlights?: string[];
   /** Lead projects render large with a video slot. */
   lead?: boolean;
   /** Gameplay video: click-to-play YouTube embed over the screenshot. */
@@ -95,19 +97,6 @@ export const PROJECTS: Project[] = [
     contributions: { commits: 2676, prs: 146 },
   },
   {
-    slug: "airdropstop",
-    name: "AirdropStop",
-    pitch:
-      "Crypto airdrop directory rebuilt from a lost database, where an AI pipeline sources every fact to a quote.",
-    url: "https://www.airdropstop.com",
-    metrics: [
-      { value: "317", label: "verified listings" },
-      { value: "0", label: "databases: the repo is the CMS" },
-    ],
-    stack: ["Next.js", "Tailwind", "Firecrawl", "Claude"],
-    contributions: { commits: 272, prs: 15 },
-  },
-  {
     slug: "aiangels",
     name: "AI Angels",
     pitch:
@@ -118,6 +107,12 @@ export const PROJECTS: Project[] = [
       { value: "566", label: "AI companions with streaming chat and voice, some with their own Telegram bot" },
       { value: "132,000", label: "pages indexed by Google" },
       { value: "~4,000", label: "Google clicks a day" },
+    ],
+    highlights: [
+      "4 payment gateway integrations (Verotel FlexPay, FlowGuard, Vexutopia, NOWPayments crypto), routed per plan, with signed webhooks and reconciliation crons",
+      "Auth orchestration: email codes, Google and Discord OAuth, guest sessions that merge into the account on signup, Telegram account linking",
+      "Email automation: Mailgun, SendGrid and SMTP failover with health checks, localized code emails, drip and capture sequences",
+      "Streaming LLM chat with model A/B arms and provider failover; voice via Deepgram, ElevenLabs and realtime calls",
     ],
     stack: ["Next.js", "Supabase", "Prisma", "Vercel AI SDK", "xAI Grok", "Deepgram", "Telegram bots"],
     contributions: { commits: 4862, prs: 932 },
@@ -134,8 +129,27 @@ export const PROJECTS: Project[] = [
       { value: "16", label: "cron pipelines for generation, SEO and analytics" },
       { value: "40,000+", label: "SEO video compilations and 11,700+ images" },
     ],
+    highlights: [
+      "Automated companion generator: casting, reference images, photos and video, on two cron lanes so slow video renders never block the quick steps",
+      "AI image and video studio across Seedream, Grok, Seedance and Kling, with shared character reference sets and a safety interlock on explicit references",
+      "SEO audit: 59,000 Semrush keywords against weekly Search Console data, with AI page-fit and index checks",
+      "Live operations: deck.gl user map, LLM cost dashboards, a chat moderation queue and payment drift detection",
+    ],
     stack: ["Next.js", "Supabase", "Seedream", "Seedance", "Kling", "ffmpeg", "deck.gl", "Recharts", "Playwright"],
     contributions: { commits: 788, prs: 249 },
+  },
+  {
+    slug: "airdropstop",
+    name: "AirdropStop",
+    pitch:
+      "Crypto airdrop directory rebuilt from a lost database, where an AI pipeline sources every fact to a quote.",
+    url: "https://www.airdropstop.com",
+    metrics: [
+      { value: "317", label: "verified listings" },
+      { value: "0", label: "databases: the repo is the CMS" },
+    ],
+    stack: ["Next.js", "Tailwind", "Firecrawl", "Claude"],
+    contributions: { commits: 272, prs: 15 },
   },
   {
     slug: "ilusalong24",
