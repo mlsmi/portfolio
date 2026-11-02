@@ -1,4 +1,5 @@
 import { ProjectCard } from "@/components/project-card";
+import { TerminalReceipts } from "@/components/terminal-receipts";
 import { PROJECTS } from "@/lib/projects";
 
 export function ProjectsSection() {
@@ -7,14 +8,21 @@ export function ProjectsSection() {
 
   return (
     <section id="work" aria-labelledby="work-heading" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
-      <h2 id="work-heading" className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-        Selected work
-      </h2>
-      <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted">
-        Eight products in production. Six built solo, end to end. AI Angels and
-        its admin dashboard: engineering lead of a three-person team. Commit
-        and PR counts are mine, from GitHub (November 2026).
-      </p>
+      <div className="grid items-end gap-10 lg:grid-cols-12">
+        <div className="lg:col-span-6">
+          <h2 id="work-heading" className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+            Selected work
+          </h2>
+          <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted">
+            Eight products in production. Six built solo, end to end. AI Angels and
+            its admin dashboard: engineering lead of a three-person team. Commit
+            and PR counts are mine, from GitHub (November 2026).
+          </p>
+        </div>
+        <div className="min-w-0 lg:col-span-6">
+          <TerminalReceipts />
+        </div>
+      </div>
       <div className="mt-12 space-y-6">
         {leads.map((project, i) => (
           <ProjectCard key={project.slug} project={project} reverse={i % 2 === 1} />

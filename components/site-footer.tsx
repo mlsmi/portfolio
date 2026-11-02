@@ -3,7 +3,14 @@ import { SITE } from "@/lib/site-config";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line">
+    <footer className="relative isolate overflow-hidden border-t border-line">
+      {/* Retro Grid (adapted from Magic UI as CSS, app/globals.css
+          .retro-*): a cyan floor scrolling toward the viewer. */}
+      <div aria-hidden className="retro">
+        <div className="retro-plane">
+          <div className="retro-lines" />
+        </div>
+      </div>
       <div className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 sm:pt-20">
         <FooterWordmark text={SITE.handle} />
       </div>

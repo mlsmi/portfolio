@@ -71,8 +71,9 @@ appear there; local and preview builds don't count.
 ## Effects
 
 The motion and hover effects are adapted from
-[Aceternity UI](https://ui.aceternity.com/components) and ported without
-its `motion` dependency: CSS in `app/globals.css`, plus small client
+[Aceternity UI](https://ui.aceternity.com/components) and
+[Magic UI](https://magicui.design/docs/components) and ported without
+their `motion` dependency: CSS in `app/globals.css`, plus small client
 components that write CSS variables or DOM attributes instead of
 re-rendering. All of them use the one cyan accent, and all of them sit
 behind `prefers-reduced-motion`.
@@ -92,6 +93,12 @@ behind `prefers-reduced-motion`.
 | AI section | Tracing Beam | scroll-driven CSS, `.trace-*` |
 | Stack | Card Hover Effect | `components/hover-highlight-grid.tsx`, `components/sliding-highlight.ts` |
 | Footer | Text Hover Effect | `components/footer-wordmark.tsx`, `.wordmark-*` |
+| Hero name | Magic UI Kinetic Text | `components/kinetic-text.tsx`, `.kinetic` (CSS only, letters stay real text) |
+| Hero label | Magic UI Animated Shiny Text | `.shiny-text` |
+| Work header | Magic UI Terminal | `components/terminal-receipts.tsx` (numbers from `lib/projects.ts`), `components/arm-on-view.tsx`, `.term-*` |
+| Between Work and AI | Magic UI Scroll Based Velocity | `components/velocity-marquee.tsx`, rows in `lib/skills.ts` (`MARQUEE_ROWS`), `.vm-*` |
+| AI section | Magic UI Animated Beam | `components/agent-beams.tsx`, `.beam-*` |
+| Footer floor | Magic UI Retro Grid | `.retro-*` |
 
 Pointer effects only run with a mouse or pen. Scroll-driven ones fall
 back to a static state in browsers without `animation-timeline`.

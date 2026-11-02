@@ -1,9 +1,12 @@
+import { AgentBeams } from "@/components/agent-beams";
+import { PROJECTS } from "@/lib/projects";
+import { SITE } from "@/lib/site-config";
 import { AI_HIGHLIGHTS, AI_TOOLS } from "@/lib/skills";
 
 /**
  * Full-width band, visually distinct from the card grids around it:
- * raised surface, an asymmetric 5/7 split, highlights as hairline rows
- * along a tracing-beam rail.
+ * raised surface, an asymmetric 5/7 split: the agent-fleet beam diagram
+ * on the left, highlights as hairline rows along a tracing-beam rail.
  */
 export function AiSection() {
   return (
@@ -19,16 +22,13 @@ export function AiSection() {
               that way daily, and I build the pipelines and automations that let
               products run themselves.
             </p>
-            <ul className="mt-8 flex flex-wrap gap-2" aria-label="AI tooling used daily">
-              {AI_TOOLS.map((tool) => (
-                <li
-                  key={tool}
-                  className="border border-line px-3 py-1.5 font-mono text-xs text-muted"
-                >
-                  {tool}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-10">
+              <AgentBeams
+                tools={AI_TOOLS}
+                hub={SITE.handle}
+                outputs={[`${PROJECTS.length} products`, "LLM pipelines", "Automations"]}
+              />
+            </div>
           </div>
           {/* Tracing Beam (adapted from Aceternity UI as scroll-driven
               CSS, app/globals.css .trace-*): a beam slides down the rail

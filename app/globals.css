@@ -1054,3 +1054,279 @@ html {
     stroke-dashoffset: 1;
   }
 }
+
+/* --------------------- Round 3: Magic UI picks ---------------------
+ * Adapted from Magic UI (magicui.design/docs/components), same rules:
+ * no `motion`, cyan only, reduced-motion gated, real text in the HTML.
+ * ------------------------------------------------------------------ */
+
+/* Kinetic Text (components/kinetic-text.tsx): the hovered letter of the
+   hero name swells to a heavier weight (Geist is a variable font) and
+   its neighbours step up with it. Hover devices only. */
+.kinetic .k {
+  transition:
+    font-weight 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    text-shadow 0.35s;
+}
+
+@media (hover: hover) {
+  .kinetic .k:hover {
+    font-weight: 860;
+    text-shadow: 0 0 28px rgb(103 224 244 / 0.45);
+  }
+
+  .kinetic .k:hover + .k,
+  .kinetic .k:has(+ .k:hover) {
+    font-weight: 730;
+  }
+
+  .kinetic .k:hover + .k + .k,
+  .kinetic .k:has(+ .k + .k:hover) {
+    font-weight: 660;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic .k {
+    transition: none;
+  }
+}
+
+/* Animated Shiny Text: a light band pans across the text now and then.
+   The text is translucent so the band (background-clip: text) shows. */
+.shiny-text {
+  --shiny-width: 90px;
+  color: rgb(94 107 128 / 0.8);
+  background: linear-gradient(to right, transparent, rgb(231 237 246 / 0.95) 50%, transparent) 0 0 /
+    var(--shiny-width) 100% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shiny-text {
+    animation: shiny-text 8s cubic-bezier(0.6, 0.6, 0, 1) 2.6s infinite;
+  }
+}
+
+@keyframes shiny-text {
+  0%,
+  90%,
+  100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+  }
+  30%,
+  60% {
+    background-position: calc(100% + var(--shiny-width)) 0;
+  }
+}
+
+/* Animated Beam (components/agent-beams.tsx): a faint path per link and a
+   short glowing dash that runs along it (pathLength=1 dash units). */
+.beam-base {
+  fill: none;
+  stroke: rgb(148 163 184 / 0.22);
+  stroke-width: 1;
+}
+
+.beam-dash {
+  display: none;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: square;
+  stroke-dasharray: 0.16 1;
+  stroke-dashoffset: 0.16;
+  filter: drop-shadow(0 0 3px rgb(103 224 244 / 0.9));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .beam-dash {
+    display: inline;
+    animation: beam-run 3.2s cubic-bezier(0.45, 0, 0.25, 1) var(--d, 0s) infinite both;
+  }
+}
+
+@keyframes beam-run {
+  0% {
+    stroke-dashoffset: 0.16;
+  }
+  70%,
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+.beam-hub {
+  box-shadow:
+    0 0 0 4px rgb(103 224 244 / 0.06),
+    0 0 32px -6px rgb(103 224 244 / 0.55);
+}
+
+/* Terminal (components/terminal-receipts.tsx): command lines type out in
+   ch steps, outputs appear after them, a block cursor blinks at the end.
+   Armed only with JS and motion allowed while the panel is off screen
+   (components/arm-on-view.tsx); otherwise all text is simply there. */
+.term-type {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  white-space: pre;
+}
+
+.term-cursor {
+  display: inline-block;
+  width: 1ch;
+  height: 1.15em;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgb(103 224 244 / 0.6);
+}
+
+[data-boot="armed"] .term-line,
+[data-boot="armed"] .term-cursor {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-boot="go"] .term-typed .term-type {
+    animation: term-type var(--dur) steps(var(--n), end) var(--t) both;
+  }
+
+  [data-boot="go"] .term-out,
+  [data-boot="go"] .term-cursor {
+    animation: term-show 0.01s linear var(--t) both;
+  }
+
+  .term-cursor {
+    animation: term-blink 1.1s steps(1) infinite;
+  }
+
+  [data-boot="go"] .term-cursor {
+    animation:
+      term-show 0.01s linear var(--t) both,
+      term-blink 1.1s steps(1) var(--t) infinite;
+  }
+}
+
+@keyframes term-type {
+  from {
+    width: 0;
+  }
+  to {
+    width: calc(var(--n) * 1ch);
+  }
+}
+
+@keyframes term-show {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes term-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Scroll Based Velocity (components/velocity-marquee.tsx): two oversized
+   rows drifting in opposite directions; JS writes their transforms. */
+.vm {
+  overflow: hidden;
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+
+.vm-row + .vm-row {
+  margin-top: 0.25rem;
+}
+
+.vm-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.vm-copy {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  font-size: clamp(2.4rem, 6.5vw, 5.25rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.vm-item {
+  padding-inline: 0.32em;
+}
+
+.vm-outline .vm-item {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(148 163 184 / 0.4);
+}
+
+.vm-fill .vm-item {
+  color: rgb(231 237 246 / 0.6);
+}
+
+.vm-sep {
+  width: 0.16em;
+  height: 0.16em;
+  flex-shrink: 0;
+  background: var(--accent);
+  box-shadow: 0 0 14px rgb(103 224 244 / 0.7);
+}
+
+.vm-outline .vm-sep {
+  background: transparent;
+  border: 1px solid rgb(103 224 244 / 0.7);
+  box-shadow: none;
+}
+
+/* Retro Grid: a cyan floor scrolling toward the viewer under the footer
+   wordmark. The plane moves by exactly one cell per loop, so the layer
+   stays small. */
+.retro {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  perspective: 220px;
+  pointer-events: none;
+  opacity: 0.6;
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, #000 62%, #000 82%, transparent 100%);
+}
+
+.retro-plane {
+  position: absolute;
+  top: 52%;
+  right: -60%;
+  left: -60%;
+  height: 220%;
+  transform-origin: 50% 0;
+  transform: rotateX(68deg);
+}
+
+.retro-lines {
+  position: absolute;
+  inset: -60px 0 0;
+  background-image:
+    linear-gradient(to right, rgb(103 224 244 / 0.34) 1px, transparent 0),
+    linear-gradient(to bottom, rgb(103 224 244 / 0.34) 1px, transparent 0);
+  background-size: 60px 60px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .retro-lines {
+    animation: retro-move 1.8s linear infinite;
+  }
+}
+
+@keyframes retro-move {
+  to {
+    transform: translateY(60px);
+  }
+}

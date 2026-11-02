@@ -4,8 +4,10 @@ import { GithubActivity } from "@/components/github-activity";
 import { Hero } from "@/components/hero";
 import { ProjectsSection } from "@/components/projects-section";
 import { SkillsSection } from "@/components/skills-section";
+import { VelocityMarquee } from "@/components/velocity-marquee";
 import { getGitHubActivity } from "@/lib/github/fetch";
 import { SITE, siteUrl } from "@/lib/site-config";
+import { MARQUEE_ROWS } from "@/lib/skills";
 
 /** The one ISR surface: refresh the GitHub data daily. */
 export const revalidate = 86400;
@@ -32,6 +34,7 @@ export default async function Home() {
       <Hero />
       <GithubActivity activity={activity} />
       <ProjectsSection />
+      <VelocityMarquee rows={MARQUEE_ROWS} />
       <AiSection />
       <SkillsSection />
       <ContactSection />
