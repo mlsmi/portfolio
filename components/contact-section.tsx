@@ -9,7 +9,14 @@ const FACTS: Array<{ label: string; value: string }> = [
 
 export function ContactSection() {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="border-t border-line">
+    // data-glow: GlowField lights the dot field under the cursor.
+    <section
+      id="contact"
+      data-glow
+      aria-labelledby="contact-heading"
+      className="relative isolate overflow-hidden border-t border-line"
+    >
+      <div aria-hidden className="dot-field" />
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 sm:py-32 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <h2 id="contact-heading" className="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
@@ -47,7 +54,10 @@ export function ContactSection() {
           </div>
         </div>
         <div className="lg:col-span-7">
-          <ContactForm />
+          <div data-glow className="glow-panel border border-line bg-surface p-5 sm:p-7">
+            <span aria-hidden className="glow-bloom" />
+            <ContactForm />
+          </div>
         </div>
       </div>
     </section>

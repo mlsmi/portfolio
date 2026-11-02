@@ -79,12 +79,16 @@ behind `prefers-reduced-motion`.
 
 | Where | Aceternity source | Implementation |
 | --- | --- | --- |
-| Header | Resizable Navbar | `components/site-header.tsx`, `.site-bar` |
+| Header | Resizable Navbar | `components/site-header.tsx`, `.site-bar`; the pill rests on the section in view (`aria-current`), and a hairline shows scroll progress |
 | Hero backdrop | Spotlight New, Grid Background | `components/hero.tsx`, `.spotlight-*`, `.hero-grid` |
+| Hero monitor wall | 3D Marquee | `components/hero-wall.tsx`, `.wall-*` (large screens only, lazy images) |
 | Hero role | Encrypted Text | `components/encrypted-text.tsx` (server HTML keeps the real text) |
 | Hero phrase | Pointer Highlight | `components/pointer-highlight.tsx`, `.ph-*` |
 | Hero CTA | Moving Border | `components/moving-border-link.tsx`, `.orbit-*` |
-| Project cards, heatmap | Glowing Effect, Card Spotlight | `components/glow-field.tsx` (one listener for every `[data-glow]`), `.glow-panel` |
+| Project cards, heatmap, contact form | Glowing Effect, Card Spotlight | `components/glow-field.tsx` (one listener for every `[data-glow]`), `.glow-panel` |
+| GitHub stats | Text Flipping Board | `components/flap-value.tsx`, `.flap*` (server HTML keeps the real values) |
+| Heatmap | (boot sweep) | `components/heatmap-tooltip.tsx` arms `data-boot`; cells carry `--w` |
+| Contact | Hero Highlight dots, Stateful Button | `.dot-field` (lit by GlowField), `components/contact-form.tsx` |
 | AI section | Tracing Beam | scroll-driven CSS, `.trace-*` |
 | Stack | Card Hover Effect | `components/hover-highlight-grid.tsx`, `components/sliding-highlight.ts` |
 | Footer | Text Hover Effect | `components/footer-wordmark.tsx`, `.wordmark-*` |

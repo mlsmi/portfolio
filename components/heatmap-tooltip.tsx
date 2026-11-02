@@ -27,10 +27,37 @@ function tipFor(target: EventTarget | null): Tip | null {
  * Portaled to <body>: a transformed ancestor (the panel's scroll-reveal
  * animation) would otherwise become the containing block of a fixed
  * element and push the tooltip off-screen.
+ *
+ * It also arms the boot sweep (app/globals.css, data-boot): if the
+ * calendar is still off screen at mount and motion is allowed, its cells
+ * wait hidden, then power on week by week once a quarter of it is in
+ * view. Already on screen, without JS, or with reduced motion, the cells
+ * are simply there.
  */
 export function HeatmapTooltip({ children }: { children: React.ReactNode }) {
   const [tip, setTip] = useState<Tip | null>(null);
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) return;
+    el.dataset.boot = "armed";
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.intersectionRatio < 0.25) return;
+        el.dataset.boot = "go";
+        observer.disconnect();
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      delete el.dataset.boot;
+    };
+  }, []);
 
   useEffect(() => {
     if (!tip) return;

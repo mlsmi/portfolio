@@ -1,4 +1,5 @@
 import { ContributionHeatmap, HeatmapLegend } from "@/components/contribution-heatmap";
+import { FlapValue } from "@/components/flap-value";
 import { busiestDay, dailyAverage, longestStreak } from "@/lib/github/stats";
 import type { ActivityResult } from "@/lib/github/types";
 import { PROJECTS } from "@/lib/projects";
@@ -31,9 +32,9 @@ function StatTile({
       }
     >
       <p className={`nums ${headline ? "text-5xl text-accent sm:text-6xl" : "text-3xl text-ink sm:text-4xl"}`}>
-        {value}
+        <FlapValue value={value} />
       </p>
-      <p className="mt-2 text-sm leading-snug text-muted">{label}</p>
+      <p className="mt-3 text-sm leading-snug text-muted">{label}</p>
       {sub ? <p className="mt-1 font-mono text-xs text-faint">{sub}</p> : null}
     </div>
   );

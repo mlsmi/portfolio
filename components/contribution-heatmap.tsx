@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 import { HeatmapTooltip } from "@/components/heatmap-tooltip";
 import type { ContributionDay } from "@/lib/github/types";
 
@@ -123,6 +125,7 @@ export function ContributionHeatmap({ days }: { days: ContributionDay[] }) {
             height={CELL}
             fill={`var(--heat-${cell.level})`}
             data-tip={tipText(cell)}
+            style={{ "--w": cell.week } as CSSProperties}
             className="hover:stroke-[var(--accent)]"
             strokeWidth={1}
           />

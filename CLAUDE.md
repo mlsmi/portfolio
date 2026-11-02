@@ -54,8 +54,9 @@ npm run smoke       # 17 checks against http://localhost:3000
   animation reduced-motion gated. The card glow is one listener
   (`components/glow-field.tsx`): add `data-glow`, `glow-panel` and a
   `glow-bloom` span to a bordered panel to opt it in. The hero role
-  decrypts client-side, so the server HTML must keep the real text (smoke
-  checks it).
+  decrypts and the GitHub stats flip client-side, so the server HTML must
+  keep the real text and values (smoke checks the role). The hero wall is
+  large-screen only with lazy images, so phones never fetch them.
 - Media: `scripts/capture.ts` recaptures the project screenshots
   (aiwizard, buybitcoinsmart, airdropstop and ilusalong24 in dark mode). The aiangels
   image is an owner-supplied app screenshot, unblurred by owner decision,
