@@ -16,6 +16,10 @@ async function main() {
   const html = await res.text();
   check("home responds 200", res.status === 200, String(res.status));
   check("title present", html.includes("Meelis Mikiver"));
+  // The hero role decrypts client-side (components/encrypted-text.tsx);
+  // the server HTML must still carry the real words for crawlers.
+  const h1 = html.match(/<h1[\s\S]*?<\/h1>/)?.[0] ?? "";
+  check("hero h1 has the real role text", h1.includes("Full-Stack AI Engineer"));
   for (const anchor of ['id="activity"', 'id="work"', 'id="stack"', 'id="contact"']) {
     check(`section ${anchor}`, html.includes(anchor));
   }

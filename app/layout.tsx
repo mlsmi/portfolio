@@ -8,6 +8,7 @@ import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { FallingDrops } from "@/components/falling-drops";
+import { GlowField } from "@/components/glow-field";
 import { SITE, siteUrl } from "@/lib/site-config";
 
 const TITLE = `${SITE.name} | ${SITE.role}`;
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
+        <GlowField />
         <Analytics />
       </body>
     </html>

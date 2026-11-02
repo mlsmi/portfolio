@@ -219,3 +219,566 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Effects adapted from Aceternity UI (ui.aceternity.com/components),
+ * ported without their `motion` dependency: plain CSS plus a little
+ * pointer JS that writes CSS variables. Cyan only (one accent), sharp
+ * corners, and every animation sits behind prefers-reduced-motion.
+ * ------------------------------------------------------------------ */
+
+/* Registered so the glow angle tweens smoothly (CSS transition on a
+   custom property) instead of jumping between pointer samples. */
+@property --glow-start {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --glow-active {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* Glowing Effect + Card Spotlight (components/glow-field.tsx sets the
+   variables). ::after is a 1px conic arc laid over the panel's own
+   border that turns toward the pointer; ::before is a soft radial wash
+   under the cursor, painted behind the panel's content. */
+.glow-panel {
+  --glow-spread: 28;
+  --glow-gradient: conic-gradient(
+    from calc((var(--glow-start) - var(--glow-spread)) * 1deg),
+    transparent 0deg,
+    var(--accent-dim) calc(var(--glow-spread) * 0.55deg),
+    var(--ink) calc(var(--glow-spread) * 1deg),
+    var(--accent) calc(var(--glow-spread) * 1.45deg),
+    transparent calc(var(--glow-spread) * 2deg)
+  );
+  position: relative;
+  isolation: isolate;
+  transition:
+    border-color 0.2s,
+    --glow-start 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    560px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(103 224 244 / 0.075),
+    transparent 70%
+  );
+  opacity: var(--glow-hover, 0);
+  transition: opacity 0.4s;
+}
+
+.glow-panel::after,
+.glow-bloom::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  padding: 2px;
+  pointer-events: none;
+  background: var(--glow-gradient);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: var(--glow-active);
+  transition: opacity 0.3s;
+}
+
+/* The arc's bloom: a blurred copy of the ring. Needs its own element,
+   since a filter applies before a mask on the same box. */
+.glow-bloom {
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  pointer-events: none;
+  filter: blur(6px);
+  opacity: calc(var(--glow-active) * 0.9);
+  transition: opacity 0.3s;
+}
+
+.glow-bloom::before {
+  inset: -2px;
+  padding: 4px;
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .glow-panel::before,
+  .glow-panel::after,
+  .glow-bloom {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-panel {
+    transition: border-color 0.2s;
+  }
+}
+
+/* Resizable Navbar: full-width bar at the top of the page; once the page
+   scrolls (components/site-header.tsx sets data-scrolled) it contracts
+   into a floating, inset bar. At rest its content lines up with the
+   page's max-w-6xl container. */
+.site-bar {
+  --gutter: 1rem;
+  display: flex;
+  height: 3.5rem;
+  max-width: 100%;
+  margin-inline: auto;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: max(var(--gutter), calc((100% - 72rem) / 2 + var(--gutter)));
+  border: 1px solid transparent;
+  border-bottom-color: var(--line);
+  background: rgb(5 7 13 / 0.8);
+  backdrop-filter: blur(4px);
+  transition:
+    max-width 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    padding 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.4s,
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+
+@media (min-width: 40rem) {
+  .site-bar {
+    --gutter: 1.5rem;
+  }
+}
+
+[data-scrolled="true"] .site-bar {
+  max-width: min(46rem, calc(100% - 1.5rem));
+  padding-inline: 1.25rem;
+  transform: translateY(0.75rem);
+  border-color: var(--line-strong);
+  background: rgb(9 13 22 / 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow:
+    0 12px 40px -16px rgb(0 0 0 / 0.9),
+    0 0 36px -14px rgb(103 224 244 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-bar {
+    transition: none;
+  }
+}
+
+/* Sliding hover highlight (Card Hover Effect, and the navbar's hover
+   pill): one element per group, moved onto whichever item the pointer
+   is over (components/sliding-highlight.ts). */
+.slide-hl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s;
+}
+
+.slide-hl[data-on="true"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-hl {
+    transition: opacity 0.2s;
+  }
+}
+
+/* Hero backdrop: Spotlight New (two swaying light cones) over a Grid
+   Background floor. Only transform and opacity animate. */
+.hero-backdrop {
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(148 163 184 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(148 163 184 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 15%, transparent 75%);
+}
+
+.spotlight-arm {
+  position: absolute;
+  inset: 0;
+}
+
+.spotlight-arm > span {
+  position: absolute;
+  top: 0;
+  height: 1380px;
+}
+
+.spotlight-arm .beam-1 {
+  width: 560px;
+  background: radial-gradient(
+    68.54% 68.72% at 55.02% 31.46%,
+    hsl(188 100% 85% / 0.13) 0,
+    hsl(188 100% 55% / 0.03) 50%,
+    hsl(188 100% 45% / 0) 80%
+  );
+}
+
+.spotlight-arm .beam-2,
+.spotlight-arm .beam-3 {
+  width: 240px;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    hsl(188 100% 85% / 0.08) 0,
+    hsl(188 100% 55% / 0.025) 80%,
+    transparent 100%
+  );
+}
+
+.spotlight-arm .beam-3 {
+  opacity: 0.7;
+}
+
+.spotlight-left > span {
+  left: 0;
+}
+
+.spotlight-left .beam-1 {
+  transform: translateY(-350px) rotate(-45deg);
+}
+
+.spotlight-left .beam-2 {
+  transform-origin: top left;
+  transform: rotate(-45deg) translate(5%, -50%);
+}
+
+.spotlight-left .beam-3 {
+  transform-origin: top left;
+  transform: rotate(-45deg) translate(-180%, -70%);
+}
+
+.spotlight-right > span {
+  right: 0;
+}
+
+.spotlight-right .beam-1 {
+  transform: translateY(-350px) rotate(45deg);
+}
+
+.spotlight-right .beam-2 {
+  transform-origin: top right;
+  transform: rotate(45deg) translate(-5%, -50%);
+}
+
+.spotlight-right .beam-3 {
+  transform-origin: top right;
+  transform: rotate(45deg) translate(180%, -70%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-backdrop {
+    animation: fade-in 1.6s ease-out both;
+  }
+
+  .spotlight-left {
+    animation: spotlight-sway 7s ease-in-out infinite alternate;
+  }
+
+  .spotlight-right {
+    animation: spotlight-sway 7s ease-in-out infinite alternate-reverse;
+    --sway: -100px;
+  }
+}
+
+@keyframes spotlight-sway {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--sway, 100px));
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Encrypted Text (components/encrypted-text.tsx): the scramble glyphs
+   read a touch dimmer than the decrypted line. */
+.encrypted[data-state="scrambling"] {
+  opacity: 0.8;
+}
+
+/* Pointer Highlight: a box draws itself around a phrase while a cursor
+   travels to its far corner. Without motion it simply sits there. */
+.ph-box {
+  position: absolute;
+  inset: -2px -5px;
+  border: 1px solid rgb(103 224 244 / 0.7);
+  background: var(--accent-soft);
+  pointer-events: none;
+}
+
+.ph-cursor {
+  position: absolute;
+  left: calc(100% + 4px);
+  top: calc(100% - 2px);
+  width: 13px;
+  height: 17px;
+  color: var(--accent);
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgb(103 224 244 / 0.55));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ph-box {
+    animation: ph-draw 0.95s cubic-bezier(0.65, 0, 0.35, 1) var(--ph-delay, 1.9s) both;
+  }
+
+  .ph-cursor {
+    animation: ph-travel 0.95s cubic-bezier(0.65, 0, 0.35, 1) var(--ph-delay, 1.9s) both;
+  }
+}
+
+@keyframes ph-draw {
+  from {
+    clip-path: inset(0 100% 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes ph-travel {
+  from {
+    left: -5px;
+    top: -4px;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+}
+
+/* Moving Border: a cyan comet orbits the button's sharp edge. The
+   oversized conic square rotates behind a 1px frame, so only transform
+   animates. */
+.orbit-border {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  padding: 1px;
+  background: var(--line-strong);
+  box-shadow: 0 0 28px -10px rgb(103 224 244 / 0.55);
+  transition: box-shadow 0.3s;
+}
+
+.orbit-border:hover {
+  box-shadow: 0 0 36px -8px rgb(103 224 244 / 0.75);
+}
+
+.orbit-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 210deg,
+    var(--accent-dim) 290deg,
+    var(--accent) 340deg,
+    var(--ink) 360deg
+  );
+  transform: translate(-50%, -50%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-spinner {
+    animation: orbit-spin 3.6s linear infinite;
+  }
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
+}
+
+/* Tracing Beam: a rail beside the AI highlights. A beam with a glowing
+   head slides down it as the list scrolls through the viewport, and
+   each item's node lights up as it passes. Scroll-driven, so browsers
+   without support (and reduced motion) get a static rail with lit
+   nodes. */
+.trace {
+  --trace-pad: 2.25rem;
+  position: relative;
+}
+
+.trace-list {
+  padding-left: var(--trace-pad);
+}
+
+.trace-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 15px;
+  overflow: hidden;
+  pointer-events: none;
+  view-timeline: --trace;
+  mask-image: linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
+}
+
+.trace-rail::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 7px;
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.trace-beam {
+  display: none;
+  position: absolute;
+  inset: 0 auto 0 7px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 55%,
+    var(--accent-dim) 85%,
+    var(--accent) 99%,
+    var(--ink) 100%
+  );
+}
+
+.trace-beam::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  background: var(--ink);
+  box-shadow: 0 0 10px 3px rgb(103 224 244 / 0.6);
+}
+
+.trace-node {
+  position: absolute;
+  top: calc(1.75rem + 0.875rem - 4px);
+  left: calc(3.5px - var(--trace-pad));
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--accent-dim);
+  background: var(--accent);
+  box-shadow: 0 0 10px rgb(103 224 244 / 0.5);
+}
+
+@media (min-width: 64rem) {
+  .trace-list > li:first-child .trace-node {
+    top: calc(0.875rem - 4px);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .trace-beam {
+      display: block;
+      animation: trace-slide linear both;
+      animation-timeline: --trace;
+      animation-range: cover 25% cover 75%;
+    }
+
+    .trace-node {
+      animation: trace-node linear both;
+      animation-timeline: view();
+      animation-range: cover 35% cover 50%;
+    }
+  }
+}
+
+@keyframes trace-slide {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes trace-node {
+  from {
+    border-color: var(--line-strong);
+    background: var(--surface);
+    box-shadow: none;
+  }
+}
+
+/* Text Hover Effect: the footer wordmark. Its outline draws itself as it
+   scrolls into view; a cyan gradient stroke shows under the cursor. */
+.wordmark text {
+  fill: transparent;
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  stroke-width: 0.3;
+}
+
+.wordmark-draw {
+  stroke: rgb(148 163 184 / 0.36);
+}
+
+.wordmark text.wordmark-glow {
+  stroke-width: 0.8;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.wordmark[data-hover="true"] .wordmark-glow {
+  opacity: 1;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wordmark-draw {
+      stroke-dasharray: 1000;
+      animation: wordmark-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes wordmark-draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

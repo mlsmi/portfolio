@@ -73,7 +73,11 @@ export function GithubActivity({ activity }: { activity: ActivityResult }) {
       </div>
       {/* No text selection, iOS callout or tap flash: a press on a cell
           should show its tooltip, not select text and open the magnifier. */}
-      <div className="reveal mt-14 select-none border border-line bg-surface p-4 [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] sm:p-6">
+      <div
+        data-glow
+        className="reveal glow-panel mt-14 select-none border border-line bg-surface p-4 [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] sm:p-6"
+      >
+        <span aria-hidden className="glow-bloom" />
         <ContributionHeatmap days={data.days} />
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="font-mono text-[11px] text-faint">

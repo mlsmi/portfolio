@@ -2,7 +2,8 @@ import { AI_HIGHLIGHTS, AI_TOOLS } from "@/lib/skills";
 
 /**
  * Full-width band, visually distinct from the card grids around it:
- * raised surface, an asymmetric 5/7 split, highlights as hairline rows.
+ * raised surface, an asymmetric 5/7 split, highlights as hairline rows
+ * along a tracing-beam rail.
  */
 export function AiSection() {
   return (
@@ -29,10 +30,17 @@ export function AiSection() {
               ))}
             </ul>
           </div>
-          <div className="lg:col-span-7">
-            <ul className="divide-y divide-line border-t border-line lg:border-t-0">
+          {/* Tracing Beam (adapted from Aceternity UI as scroll-driven
+              CSS, app/globals.css .trace-*): a beam slides down the rail
+              as the list scrolls past, lighting each item's node. */}
+          <div className="trace lg:col-span-7">
+            <div aria-hidden className="trace-rail">
+              <span className="trace-beam" />
+            </div>
+            <ul className="trace-list divide-y divide-line">
               {AI_HIGHLIGHTS.map((highlight) => (
-                <li key={highlight.title} className="py-7 first:lg:pt-0">
+                <li key={highlight.title} className="relative py-7 first:lg:pt-0">
+                  <span aria-hidden className="trace-node" />
                   <h3 className="text-lg font-semibold tracking-tight text-ink">{highlight.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{highlight.body}</p>
                 </li>
