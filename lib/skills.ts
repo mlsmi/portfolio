@@ -51,8 +51,8 @@ export const SKILL_GROUPS: SkillGroup[] = [
   {
     name: "Payments, Auth & Email",
     items: [
-      "Multi-gateway payments: Verotel, FlowGuard, Vexutopia",
-      "NOWPayments crypto with reconciliation crons",
+      "Multi-gateway card payments, routed per plan",
+      "Crypto payments with reconciliation crons",
       "Telegram Stars and TON",
       "Auth: email codes, Google and Discord OAuth, guest-to-account merge",
       "Email: Mailgun, SendGrid and SMTP failover, drip sequences",

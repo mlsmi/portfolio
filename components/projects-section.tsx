@@ -21,8 +21,12 @@ export function ProjectsSection() {
         ))}
       </div>
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        {rest.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+        {rest.map((project, i) => (
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            wide={rest.length % 2 === 1 && i === rest.length - 1}
+          />
         ))}
       </div>
     </section>

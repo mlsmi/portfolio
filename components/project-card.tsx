@@ -56,7 +56,7 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
           </div>
         ))}
       </dl>
-      {project.highlights ? (
+      {project.highlights && !lead ? (
         <ul className="mt-5 space-y-2 border-l border-line pl-4 text-sm leading-relaxed text-muted">
           {project.highlights.map((item) => (
             <li key={item}>{item}</li>
@@ -84,18 +84,41 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
  * The whole card is the hit area via a stretched link on the name;
  * crawlers and screen readers get the name as anchor text.
  */
-export function ProjectCard({ project, reverse }: { project: Project; reverse?: boolean }) {
+export function ProjectCard({
+  project,
+  reverse,
+  wide,
+}: {
+  project: Project;
+  reverse?: boolean;
+  /** Grid card spanning both columns (an odd last card), laid out side by side. */
+  wide?: boolean;
+}) {
   const interactive = Boolean(project.url);
+  const row = project.lead || wide;
   return (
     <article
       className={`reveal group relative flex flex-col overflow-hidden border border-line bg-surface transition-colors ${
         interactive ? "hover:border-line-strong" : ""
-      } ${project.lead ? (reverse ? "md:flex-row-reverse" : "md:flex-row") : ""}`}
+      } ${wide ? "md:col-span-2" : ""}`}
     >
-      <div className={project.lead ? "md:w-3/5 md:shrink-0" : ""}>
-        <Media project={project} priority={project.lead} />
+      <div className={`flex flex-1 flex-col ${row ? (reverse ? "md:flex-row-reverse" : "md:flex-row") : ""}`}>
+        <div className={project.lead ? "md:w-3/5 md:shrink-0" : wide ? "md:w-1/2 md:shrink-0" : ""}>
+          <Media project={project} priority={project.lead} />
+        </div>
+        <CardBody project={project} lead={project.lead} />
       </div>
-      <CardBody project={project} lead={project.lead} />
+      {/* On a lead card the highlights span the full width under the row,
+          so the text column never outgrows the screenshot beside it. */}
+      {project.lead && project.highlights ? (
+        <ul className="grid gap-x-8 gap-y-3 border-t border-line p-5 text-sm leading-relaxed text-muted sm:p-6 md:grid-cols-2">
+          {project.highlights.map((item) => (
+            <li key={item} className="border-l border-line pl-4">
+              {item}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </article>
   );
 }
