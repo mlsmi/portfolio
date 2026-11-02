@@ -50,7 +50,7 @@ npm run smoke       # 16 checks against http://localhost:3000
   `--heat-*` scale for the heatmap, sharp corners). No em or en dashes in
   any user-visible text. No new dependencies without need.
 - Media: `scripts/capture.ts` recaptures the project screenshots
-  (aiwizard, buybitcoinsmart and airdropstop in dark mode). The aiangels
+  (aiwizard, buybitcoinsmart, airdropstop and ilusalong24 in dark mode). The aiangels
   image is an owner-supplied app screenshot, unblurred by owner decision,
   and is never captured: don't add it back to the capture list.
   `scripts/render-mocks.ts` renders the admin-card and OG mocks. Review

@@ -29,7 +29,7 @@ const SITES: Array<{ slug: string; url: string; dark?: boolean }> = [
   { slug: "aiwizard", url: "https://www.aiwizard.ai", dark: true },
   { slug: "buybitcoinsmart", url: "https://www.buybitcoinsmart.com", dark: true },
   { slug: "airdropstop", url: "https://www.airdropstop.com", dark: true },
-  { slug: "ilusalong24", url: "https://ilusalong24.ee" },
+  { slug: "ilusalong24", url: "https://ilusalong24.ee", dark: true },
 ];
 
 const CONSENT_LABELS = [

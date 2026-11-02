@@ -79,6 +79,8 @@ export const PROJECTS: Project[] = [
       "Safety: a real-time classifier, hard blocks, a permanent minor lock, crisis lines for 173 countries and an 18+ gate",
       "Languages: the app runs in 12 languages with right-to-left layout, and companions reply in each user's own language",
       "Growth: database-driven A/B tests, referral rewards and a 50% affiliate program, push notifications and an installable PWA",
+      "Free and premium experiences: guests, free users and subscribers get different message caps, media access, content ratings and voice limits, all resolved server-side from one entitlement check, with separate trial limits",
+      "Upgrade journey: in-character premium pitches at code-chosen moments with a guard against false claims, refusal cards that route to premium or credits, A/B-tested pricing layouts, promo codes, trials and a cancellation flow",
     ],
     stack: ["Next.js", "Supabase", "Prisma", "Vercel AI SDK", "xAI Grok", "Deepgram", "Telegram bots"],
     lead: true,
