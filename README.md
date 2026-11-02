@@ -83,7 +83,7 @@ behind `prefers-reduced-motion`.
 | Header | Resizable Navbar | `components/site-header.tsx`, `.site-bar`; the pill rests on the section in view (`aria-current`), and a hairline shows scroll progress |
 | Hero backdrop | Spotlight New, Grid Background | `components/hero.tsx`, `.spotlight-*`, `.hero-grid` |
 | Hero monitor wall | 3D Marquee | `components/hero-wall.tsx`, `.wall-*` (large screens only, lazy images) |
-| Hero role | Encrypted Text | `components/encrypted-text.tsx` (server HTML keeps the real text) |
+| Hero role, "agents" in the hero copy | Encrypted Text | `components/encrypted-text.tsx` (server HTML keeps the real text; "agents" decrypts after the pointer box lands and replays on hover) |
 | Hero phrase | Pointer Highlight | `components/pointer-highlight.tsx`, `.ph-*` |
 | Hero CTA | Moving Border | `components/moving-border-link.tsx`, `.orbit-*` |
 | Project cards, heatmap, contact form | Glowing Effect, Card Spotlight | `components/glow-field.tsx` (one listener for every `[data-glow]`), `.glow-panel` |
