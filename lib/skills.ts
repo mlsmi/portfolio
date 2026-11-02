@@ -1,3 +1,5 @@
+import { PROJECTS } from "@/lib/projects";
+
 /** `featured` groups are the headline skills: rendered wide, above the rest. */
 export type SkillGroup = { name: string; items: string[]; featured?: boolean };
 
@@ -115,5 +117,24 @@ export const AI_HIGHLIGHTS: AiHighlight[] = [
     title: "Automations that run the business",
     body: "In-house bots and cron agents doing the operating: new records rendered to video on a GPU runner and posted to X, on-chain events cross-posted to Telegram, badge verification sweeps, index submissions and content refreshes, all unattended.",
     receipts: ["GitHub Actions", "cron agents", "X / Telegram bots"],
+  },
+];
+
+export type MarqueeRow = { items: string[]; tone: "outline" | "fill"; direction: 1 | -1 };
+
+/**
+ * The kinetic band between Work and AI (components/velocity-marquee.tsx).
+ * Every phrase restates a fact or skill from elsewhere on the page.
+ */
+export const MARQUEE_ROWS: MarqueeRow[] = [
+  {
+    items: ["Agentic AI", "Programmatic SEO", "LLM pipelines", "3D games", "Telegram Mini Apps"],
+    tone: "outline",
+    direction: 1,
+  },
+  {
+    items: ["130k+ pages indexed", "~4,000 Google clicks a day", "96 locales", `${PROJECTS.length} products in production`],
+    tone: "fill",
+    direction: -1,
   },
 ];

@@ -1,5 +1,6 @@
 import { EncryptedText } from "@/components/encrypted-text";
 import { HeroWall } from "@/components/hero-wall";
+import { KineticText } from "@/components/kinetic-text";
 import { MovingBorderLink } from "@/components/moving-border-link";
 import { PointerHighlight } from "@/components/pointer-highlight";
 import { SITE } from "@/lib/site-config";
@@ -39,11 +40,11 @@ export function Hero() {
         <p className="mono-label enter flex items-center gap-2.5" style={{ "--enter-i": 0 } as React.CSSProperties}>
           {/* The page's one status dot: a real availability flag. */}
           <span aria-hidden className="size-1.5 bg-accent" />
-          Open to roles and contract work
+          <span className="shiny-text">Open to roles and contract work</span>
         </p>
         <h1 className="enter mt-6" style={{ "--enter-i": 1 } as React.CSSProperties}>
           <span className="block text-5xl font-semibold tracking-tighter text-ink sm:text-7xl">
-            {SITE.name}
+            <KineticText text={SITE.name} />
           </span>
           {/* Monospace, so the decrypting glyphs never change the line's width. */}
           <span className="mt-5 block font-mono text-lg tracking-tight text-accent sm:text-xl">

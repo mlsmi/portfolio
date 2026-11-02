@@ -49,14 +49,16 @@ npm run smoke       # 17 checks against http://localhost:3000
 - Design: dark single theme locked in `app/globals.css` (one accent,
   `--heat-*` scale for the heatmap, sharp corners). No em or en dashes in
   any user-visible text. No new dependencies without need.
-- Effects (README "Effects"): adapted from Aceternity UI as dependency-free
-  ports, never pasted with `motion`. Cyan only, sharp corners, every
+- Effects (README "Effects"): adapted from Aceternity UI and Magic UI as
+  dependency-free ports, never pasted with `motion`. Cyan only, sharp corners, every
   animation reduced-motion gated. The card glow is one listener
   (`components/glow-field.tsx`): add `data-glow`, `glow-panel` and a
   `glow-bloom` span to a bordered panel to opt it in. The hero role
   decrypts and the GitHub stats flip client-side, so the server HTML must
   keep the real text and values (smoke checks the role). The hero wall is
-  large-screen only with lazy images, so phones never fetch them.
+  large-screen only with lazy images, so phones never fetch them. The
+  Work terminal and the marquee only show real numbers and copy from
+  `lib/` (never type fabricated output into the terminal).
 - Media: `scripts/capture.ts` recaptures the project screenshots
   (aiwizard, buybitcoinsmart, airdropstop and ilusalong24 in dark mode). The aiangels
   image is an owner-supplied app screenshot, unblurred by owner decision,
