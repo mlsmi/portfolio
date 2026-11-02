@@ -46,6 +46,15 @@ Environment Variables (see `.env.example`):
 Spam handling: a honeypot field answered with a fake success, plus a
 per-instance sliding-window rate limit (5 requests / 10 minutes per IP).
 
+## Analytics
+
+Vercel Web Analytics (`@vercel/analytics`, mounted in `app/layout.tsx`):
+cookieless page-view counts, visitors, referrers, countries and devices.
+In production the script and its beacons are same-origin
+(`/_vercel/insights/*`). It records only once Web Analytics is enabled
+for the project: Vercel dashboard → portfolio → Analytics → Enable. Views
+appear there; local and preview builds don't count.
+
 ## Media
 
 - `public/projects/*.webp` are real captures of the live sites, taken by
