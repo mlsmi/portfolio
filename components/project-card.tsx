@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { CardDetails } from "@/components/card-details";
 import { DemoVideo } from "@/components/demo-video";
 import { projectImage, type Project } from "@/lib/projects";
 
@@ -7,13 +8,19 @@ function host(url: string): string {
   return new URL(url).host.replace(/^www\./, "");
 }
 
+/** The "Label" of a "Label: detail" highlight, or null when it has none. */
+function labelOf(text: string): string | null {
+  const i = text.indexOf(": ");
+  return i > 0 && i <= 48 ? text.slice(0, i) : null;
+}
+
 /** "Label: detail" highlights get the label in ink so long lists scan. */
 function Highlight({ text }: { text: string }) {
-  const i = text.indexOf(": ");
-  if (i <= 0 || i > 48) return <>{text}</>;
+  const label = labelOf(text);
+  if (!label) return <>{text}</>;
   return (
     <>
-      <span className="text-ink">{text.slice(0, i)}:</span> {text.slice(i + 2)}
+      <span className="text-ink">{label}:</span> {text.slice(label.length + 2)}
     </>
   );
 }
@@ -127,15 +134,22 @@ export function ProjectCard({
         <CardBody project={project} lead={project.lead} />
       </div>
       {/* On a lead card the highlights span the full width under the row,
-          so the text column never outgrows the screenshot beside it. */}
+          so the text column never outgrows the screenshot beside it, and
+          they start collapsed behind a "Show details" bar. */}
       {project.lead && project.highlights ? (
-        <ul className="grid gap-x-8 gap-y-3 border-t border-line p-5 text-sm leading-relaxed text-muted sm:p-6 md:grid-cols-2">
-          {project.highlights.map((item) => (
-            <li key={item} className="border-l border-line pl-4">
-              <Highlight text={item} />
-            </li>
-          ))}
-        </ul>
+        <CardDetails
+          name={project.name}
+          count={project.highlights.length}
+          teaser={project.highlights.map(labelOf).filter((label) => label !== null)}
+        >
+          <ul className="grid gap-x-8 gap-y-3 px-5 pt-1 pb-6 text-sm leading-relaxed text-muted sm:px-6 md:grid-cols-2">
+            {project.highlights.map((item) => (
+              <li key={item} className="border-l border-line pl-4">
+                <Highlight text={item} />
+              </li>
+            ))}
+          </ul>
+        </CardDetails>
       ) : null}
     </article>
   );
