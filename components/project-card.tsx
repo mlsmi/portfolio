@@ -7,6 +7,17 @@ function host(url: string): string {
   return new URL(url).host.replace(/^www\./, "");
 }
 
+/** "Label: detail" highlights get the label in ink so long lists scan. */
+function Highlight({ text }: { text: string }) {
+  const i = text.indexOf(": ");
+  if (i <= 0 || i > 48) return <>{text}</>;
+  return (
+    <>
+      <span className="text-ink">{text.slice(0, i)}:</span> {text.slice(i + 2)}
+    </>
+  );
+}
+
 function Media({ project, priority }: { project: Project; priority?: boolean }) {
   const image = projectImage(project.slug);
   const alt = `Screenshot of ${project.name}`;
@@ -64,7 +75,9 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
       {project.highlights && !lead ? (
         <ul className="mt-5 space-y-2 border-l border-line pl-4 text-sm leading-relaxed text-muted">
           {project.highlights.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>
+              <Highlight text={item} />
+            </li>
           ))}
         </ul>
       ) : null}
@@ -119,7 +132,7 @@ export function ProjectCard({
         <ul className="grid gap-x-8 gap-y-3 border-t border-line p-5 text-sm leading-relaxed text-muted sm:p-6 md:grid-cols-2">
           {project.highlights.map((item) => (
             <li key={item} className="border-l border-line pl-4">
-              {item}
+              <Highlight text={item} />
             </li>
           ))}
         </ul>
