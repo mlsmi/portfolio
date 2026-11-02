@@ -115,7 +115,7 @@ export const PROJECTS: Project[] = [
     url: "https://www.aiangels.io",
     role: "Engineering lead, 3-person team",
     metrics: [
-      { value: "566", label: "AI companions, each with chat, voice and its own Telegram bot" },
+      { value: "566", label: "AI companions with streaming chat and voice, some with their own Telegram bot" },
       { value: "132,000", label: "pages indexed by Google" },
       { value: "~4,000", label: "Google clicks a day" },
     ],
