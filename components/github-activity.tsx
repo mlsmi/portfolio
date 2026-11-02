@@ -71,7 +71,9 @@ export function GithubActivity({ activity }: { activity: ActivityResult }) {
         <StatTile value={String(SITE.activeSince)} label="actively shipping since" />
         <StatTile value={String(PROJECTS.length)} label="products in production" />
       </div>
-      <div className="reveal mt-14 border border-line bg-surface p-4 sm:p-6">
+      {/* No text selection, iOS callout or tap flash: a press on a cell
+          should show its tooltip, not select text and open the magnifier. */}
+      <div className="reveal mt-14 select-none border border-line bg-surface p-4 [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] sm:p-6">
         <ContributionHeatmap days={data.days} />
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="font-mono text-[11px] text-faint">
