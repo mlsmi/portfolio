@@ -107,7 +107,8 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
 
 /**
  * The whole card is the hit area via a stretched link on the name;
- * crawlers and screen readers get the name as anchor text.
+ * crawlers and screen readers get the name as anchor text. `data-glow`
+ * opts it into the pointer glow (components/glow-field.tsx).
  */
 export function ProjectCard({
   project,
@@ -123,10 +124,12 @@ export function ProjectCard({
   const row = project.lead || wide;
   return (
     <article
-      className={`reveal group relative flex flex-col overflow-hidden border border-line bg-surface transition-colors ${
+      data-glow
+      className={`reveal glow-panel group flex flex-col border border-line bg-surface ${
         interactive ? "hover:border-line-strong" : ""
       } ${wide ? "md:col-span-2" : ""}`}
     >
+      <span aria-hidden className="glow-bloom" />
       <div className={`flex flex-1 flex-col ${row ? (reverse ? "md:flex-row-reverse" : "md:flex-row") : ""}`}>
         <div className={project.lead ? "md:w-3/5 md:shrink-0" : wide ? "md:w-1/2 md:shrink-0" : ""}>
           <Media project={project} priority={project.lead} />

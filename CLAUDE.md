@@ -36,7 +36,7 @@ npm run lint
 npm run typecheck
 npm run build       # route table must show: / with 1d revalidate, only /api/contact dynamic
 npm start           # then, in another step:
-npm run smoke       # 16 checks against http://localhost:3000
+npm run smoke       # 17 checks against http://localhost:3000
 ```
 
 ## Where things live
@@ -49,6 +49,13 @@ npm run smoke       # 16 checks against http://localhost:3000
 - Design: dark single theme locked in `app/globals.css` (one accent,
   `--heat-*` scale for the heatmap, sharp corners). No em or en dashes in
   any user-visible text. No new dependencies without need.
+- Effects (README "Effects"): adapted from Aceternity UI as dependency-free
+  ports, never pasted with `motion`. Cyan only, sharp corners, every
+  animation reduced-motion gated. The card glow is one listener
+  (`components/glow-field.tsx`): add `data-glow`, `glow-panel` and a
+  `glow-bloom` span to a bordered panel to opt it in. The hero role
+  decrypts client-side, so the server HTML must keep the real text (smoke
+  checks it).
 - Media: `scripts/capture.ts` recaptures the project screenshots
   (aiwizard, buybitcoinsmart, airdropstop and ilusalong24 in dark mode). The aiangels
   image is an owner-supplied app screenshot, unblurred by owner decision,

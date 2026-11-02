@@ -68,6 +68,30 @@ appear there; local and preview builds don't count.
   click (`components/demo-video.tsx`), so nothing loads from YouTube
   until a visitor asks for it.
 
+## Effects
+
+The motion and hover effects are adapted from
+[Aceternity UI](https://ui.aceternity.com/components) and ported without
+its `motion` dependency: CSS in `app/globals.css`, plus small client
+components that write CSS variables or DOM attributes instead of
+re-rendering. All of them use the one cyan accent, and all of them sit
+behind `prefers-reduced-motion`.
+
+| Where | Aceternity source | Implementation |
+| --- | --- | --- |
+| Header | Resizable Navbar | `components/site-header.tsx`, `.site-bar` |
+| Hero backdrop | Spotlight New, Grid Background | `components/hero.tsx`, `.spotlight-*`, `.hero-grid` |
+| Hero role | Encrypted Text | `components/encrypted-text.tsx` (server HTML keeps the real text) |
+| Hero phrase | Pointer Highlight | `components/pointer-highlight.tsx`, `.ph-*` |
+| Hero CTA | Moving Border | `components/moving-border-link.tsx`, `.orbit-*` |
+| Project cards, heatmap | Glowing Effect, Card Spotlight | `components/glow-field.tsx` (one listener for every `[data-glow]`), `.glow-panel` |
+| AI section | Tracing Beam | scroll-driven CSS, `.trace-*` |
+| Stack | Card Hover Effect | `components/hover-highlight-grid.tsx`, `components/sliding-highlight.ts` |
+| Footer | Text Hover Effect | `components/footer-wordmark.tsx`, `.wordmark-*` |
+
+Pointer effects only run with a mouse or pen. Scroll-driven ones fall
+back to a static state in browsers without `animation-timeline`.
+
 ## Content
 
 All copy and data live in `lib/site-config.ts`, `lib/projects.ts` and
