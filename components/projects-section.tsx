@@ -11,8 +11,9 @@ export function ProjectsSection() {
         Selected work
       </h2>
       <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted">
-        Eight products in production. Every one designed, built, deployed and
-        operated by me.
+        Eight products in production. Six built solo, end to end. AI Angels and
+        its admin dashboard: engineering lead of a three-person team. Commit
+        and PR counts are mine, from GitHub (November 2026).
       </p>
       <div className="mt-12 space-y-6">
         {leads.map((project, i) => (
@@ -20,8 +21,12 @@ export function ProjectsSection() {
         ))}
       </div>
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        {rest.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+        {rest.map((project, i) => (
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            wide={rest.length % 2 === 1 && i === rest.length - 1}
+          />
         ))}
       </div>
     </section>

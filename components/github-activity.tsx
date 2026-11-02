@@ -1,5 +1,5 @@
 import { ContributionHeatmap, HeatmapLegend } from "@/components/contribution-heatmap";
-import { busiestDay, dailyAverage, longestStreak, yearsSince } from "@/lib/github/stats";
+import { busiestDay, dailyAverage, longestStreak } from "@/lib/github/stats";
 import type { ActivityResult } from "@/lib/github/types";
 import { PROJECTS } from "@/lib/projects";
 import { SITE } from "@/lib/site-config";
@@ -44,7 +44,6 @@ export function GithubActivity({ activity }: { activity: ActivityResult }) {
   const streak = longestStreak(data.days);
   const peak = busiestDay(data.days);
   const avg = dailyAverage(data.days);
-  const years = yearsSince(SITE.accountCreated, new Date());
 
   return (
     <section id="activity" aria-labelledby="activity-heading" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
@@ -69,7 +68,7 @@ export function GithubActivity({ activity }: { activity: ActivityResult }) {
           label="contributions on the busiest day"
           sub={peak ? shortDate(peak.date) : undefined}
         />
-        <StatTile value={String(years)} label="years on GitHub" />
+        <StatTile value={String(SITE.activeSince)} label="actively shipping since" />
         <StatTile value={String(PROJECTS.length)} label="products in production" />
       </div>
       <div className="reveal mt-14 border border-line bg-surface p-4 sm:p-6">

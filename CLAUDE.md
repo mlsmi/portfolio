@@ -21,10 +21,10 @@ Commits must be authored as **mlsmi**, never as a generic agent identity.
 projects") builds and deploys every commit that lands on it. Changes go:
 
 1. Commit on a feature branch and push it.
-2. Open a pull request against `main`.
-3. Merge the PR once the gate below is green.
-
-Never `git push origin main`, not even a fast-forward.
+2. Open a pull request against `main`, with the gate below green.
+3. **Stop there. The owner merges PRs himself** (owner rule, 2026-11-01).
+   Never merge a PR, and never `git push origin main`, not even a
+   fast-forward.
 
 ## The gate (run before every PR)
 
@@ -50,9 +50,11 @@ npm run smoke       # 16 checks against http://localhost:3000
   `--heat-*` scale for the heatmap, sharp corners). No em or en dashes in
   any user-visible text. No new dependencies without need.
 - Media: `scripts/capture.ts` recaptures the project screenshots
-  (aiwizard, buybitcoinsmart and airdropstop in dark mode; aiangels with
-  imagery blurred for SFW); `scripts/render-mocks.ts` renders the
-  admin-card and OG mocks. Review every capture by eye before committing.
+  (aiwizard, buybitcoinsmart and airdropstop in dark mode). The aiangels
+  image is an owner-supplied app screenshot, unblurred by owner decision,
+  and is never captured: don't add it back to the capture list.
+  `scripts/render-mocks.ts` renders the admin-card and OG mocks. Review
+  every capture by eye before committing.
 - The game cards take an optional `youtubeId` in `lib/projects.ts`:
   click-to-play lite embed (`components/demo-video.tsx`) over the
   screenshot; the CSP's `frame-src` allows only youtube-nocookie.com.
