@@ -94,28 +94,29 @@ export const PROJECTS: Project[] = [
     slug: "aiangels",
     name: "AI Angels",
     pitch:
-      "AI companion platform on the web and Telegram, with a bot per companion, voice calls and streaming chat across 96 languages.",
+      "AI companion platform on the web and Telegram. I lead its engineering: architecture decisions, code reviews and a three-person team.",
     url: "https://www.aiangels.io",
-    role: "Lead developer, 3-person team",
+    role: "Engineering lead, 3-person team",
     metrics: [
+      { value: "566", label: "AI companions, each with chat, voice and its own Telegram bot" },
       { value: "132,000", label: "pages indexed by Google" },
       { value: "~4,000", label: "Google clicks a day" },
-      { value: "96", label: "locales of programmatic landing pages" },
     ],
     stack: ["Next.js", "Supabase", "Prisma", "Vercel AI SDK", "xAI Grok", "Deepgram", "Telegram bots"],
   },
   {
     slug: "aiangels-admin",
-    name: "AI Angels Studio",
+    name: "AI Angels Admin Dashboard",
     pitch:
-      "Internal AI image studio that keeps generated characters visually consistent across providers and scenes.",
+      "The operations platform behind AI Angels: an AI image and video studio, an automated companion generator, SEO audits against Search Console, pricing, outreach, cost tracking and a live user map.",
     url: null,
-    role: "Lead developer, 3-person team",
+    role: "Engineering lead, 3-person team",
     metrics: [
-      { value: "477", label: "admin API routes and 16 crons" },
-      { value: "1,844", label: "images across 35 consistent characters" },
+      { value: "89", label: "admin pages across 7 areas, on 477 API routes" },
+      { value: "16", label: "cron pipelines for generation, SEO and analytics" },
+      { value: "40,000+", label: "SEO video compilations and 11,700+ images" },
     ],
-    stack: ["Next.js", "Seedream", "Supabase", "ffmpeg", "deck.gl"],
+    stack: ["Next.js", "Supabase", "Seedream", "Seedance", "Kling", "ffmpeg", "deck.gl", "Recharts", "Playwright"],
   },
   {
     slug: "ilusalong24",

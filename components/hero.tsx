@@ -22,7 +22,7 @@ export function Hero() {
           className="enter mt-6 max-w-[58ch] text-base leading-relaxed text-muted sm:text-lg"
           style={{ "--enter-i": 2 } as React.CSSProperties}
         >
-          I ship full-stack products with agentic AI: customer apps, admin
+          I ship full-stack products with agentic AI: consumer apps, admin
           platforms, LLM pipelines and 3D games. Then I rank them on search
           engines and LLMs so people find them.
         </p>
