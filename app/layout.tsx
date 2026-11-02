@@ -6,7 +6,7 @@ import type { Metadata, Viewport } from "next";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { Starfield } from "@/components/starfield";
+import { FallingDrops } from "@/components/falling-drops";
 import { SITE, siteUrl } from "@/lib/site-config";
 
 const TITLE = `${SITE.name} | ${SITE.role}`;
@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
-        <Starfield />
+        <FallingDrops />
         <SiteHeader />
         {children}
         <SiteFooter />

@@ -68,6 +68,57 @@ body {
   color: var(--on-accent);
 }
 
+/* Falling drops background (components/falling-drops.tsx). Each streak is
+   a 1px gradient line with a glowing head; only transform and opacity
+   animate, so the layer stays on the compositor. */
+.drop {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: 1px;
+  height: var(--h);
+  border-radius: 9999px;
+  opacity: 0;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) var(--o), transparent));
+  animation: drop-fall var(--d) linear var(--t) infinite;
+}
+
+.drop::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--accent) var(--o), transparent);
+  box-shadow: 0 0 10px 3px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+@keyframes drop-fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drops {
+    display: none;
+  }
+}
+
 /* Browser-default blue focus rings clash with the theme. */
 :focus-visible {
   outline: 2px solid var(--accent);
