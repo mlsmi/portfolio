@@ -56,13 +56,19 @@ function CardBody({ project, lead }: { project: Project; lead?: boolean }) {
           </div>
         ))}
       </dl>
-      <ul className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-5" aria-label="Technology">
-        {project.stack.map((tech) => (
-          <li key={tech} className="font-mono text-xs text-faint">
-            {tech}
-          </li>
-        ))}
-      </ul>
+      <div className="mt-auto pt-5">
+        <p className="font-mono text-xs text-accent-dim">
+          {project.contributions.commits.toLocaleString("en-US")} commits ·{" "}
+          {project.contributions.prs.toLocaleString("en-US")} PRs
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1" aria-label="Technology">
+          {project.stack.map((tech) => (
+            <li key={tech} className="font-mono text-xs text-faint">
+              {tech}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

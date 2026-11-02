@@ -64,3 +64,12 @@ per-instance sliding-window rate limit (5 requests / 10 minutes per IP).
 All copy and data live in `lib/site-config.ts`, `lib/projects.ts` and
 `lib/skills.ts`. Project metrics are floors ("10,000+", "400+") checked
 against each live site, so routine growth never makes them wrong.
+
+Each card's commit and PR counts (`contributions` in `lib/projects.ts`)
+are a snapshot. Refresh them per repo with GitHub search (default-branch
+commits authored by mlsmi, and PRs opened by mlsmi):
+
+```bash
+gh api -X GET search/commits -f q='repo:mlsmi/marsrally author:mlsmi' --jq .total_count
+gh api -X GET search/issues -f q='repo:mlsmi/marsrally is:pr author:mlsmi' --jq .total_count
+```

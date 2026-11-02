@@ -10,6 +10,8 @@ export type Project = {
   /** 2-3 headline metrics, mono value + short label. */
   metrics: ProjectMetric[];
   stack: string[];
+  /** The owner's own commits (default branch) and PRs opened. */
+  contributions: { commits: number; prs: number };
   /** Set for team projects, shown under the name; absent means solo. */
   role?: string;
   /** Lead projects render large with a video slot. */
@@ -25,6 +27,10 @@ export function projectImage(slug: string): string {
 /**
  * Facts verified against each project's repository (2026-11). Metrics use
  * floors ("5,700+", "~800") so routine growth never makes them wrong.
+ *
+ * `contributions` is a snapshot from GitHub search on 2026-11-02: commits
+ * on the default branch authored as mlsmi, and PRs opened by mlsmi. The
+ * refresh queries are in README.md.
  */
 export const PROJECTS: Project[] = [
   {
@@ -39,6 +45,7 @@ export const PROJECTS: Project[] = [
       { value: "1080p", label: "replays rendered to video in the browser" },
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "WebCodecs", "Supabase", "Solana"],
+    contributions: { commits: 1771, prs: 355 },
     lead: true,
     youtubeId: "jlMZbIT5BWo",
   },
@@ -52,31 +59,40 @@ export const PROJECTS: Project[] = [
       { value: "1,000+", label: "categories, fully prerendered on every build" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude"],
+    contributions: { commits: 555, prs: 111 },
     lead: true,
   },
   {
     slug: "agi",
     name: "Alien Goats Invasion",
     pitch:
-      "Web3 multiplayer game where NFT goats raid a shared valley, with an on-chain economy that posts itself to X.",
+      "Multiplayer RPG in a rebuilt Bay Area. Fight from the Mission past the Golden Gate Bridge, Stanford's Hoover Tower and Sand Hill Road to a boss on Alcatraz. Your rarest NFT goat becomes your character.",
     url: "https://www.aliengoatsinvasion.com",
     metrics: [
-      { value: "NFT", label: "holder-gated streaks, crates and daily quests" },
-      { value: "On-chain", label: "mints and claims auto-posted to X and Telegram" },
+      { value: "8", label: "skills levelling to 99 from XP: combat, woodcutting, fishing, cooking" },
+      { value: "14", label: "enemy types, from Startup Intern and Crypto Degen to VC Associate and the Board Member boss" },
+      { value: "24", label: "regions with ~20 modelled landmarks, 64 players per shared world" },
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "Solana", "Metaplex", "Drizzle", "Neon", "Redis"],
+    contributions: { commits: 2217, prs: 392 },
   },
   {
     slug: "buybitcoinsmart",
     name: "buybitcoinsmart",
-    pitch: "How to buy bitcoin in every country on earth, in ten languages, with a Claude-powered assistant.",
+    pitch:
+      "How to buy bitcoin in every country on earth, with a Claude-powered assistant and refuter-checked translations in ten languages.",
     url: "https://www.buybitcoinsmart.com",
     metrics: [
       { value: "50,000", label: "programmatic pages in 10 languages" },
-      { value: "232", label: "country guides, translated by refuter-checked LLM pipelines" },
+      {
+        value: "22",
+        label:
+          "page types: country guides, payment methods per country, exchange-by-country pages, 659 comparisons, wallet hubs, US states, tax and licence guides",
+      },
       { value: "~140/day", label: "Google clicks three months after relaunch, zero paid SEO" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "Claude", "i18n"],
+    contributions: { commits: 2676, prs: 146 },
   },
   {
     slug: "airdropstop",
@@ -89,6 +105,7 @@ export const PROJECTS: Project[] = [
       { value: "0", label: "databases: the repo is the CMS" },
     ],
     stack: ["Next.js", "Tailwind", "Firecrawl", "Claude"],
+    contributions: { commits: 272, prs: 15 },
   },
   {
     slug: "aiangels",
@@ -103,6 +120,7 @@ export const PROJECTS: Project[] = [
       { value: "~4,000", label: "Google clicks a day" },
     ],
     stack: ["Next.js", "Supabase", "Prisma", "Vercel AI SDK", "xAI Grok", "Deepgram", "Telegram bots"],
+    contributions: { commits: 4862, prs: 932 },
   },
   {
     slug: "aiangels-admin",
@@ -117,6 +135,7 @@ export const PROJECTS: Project[] = [
       { value: "40,000+", label: "SEO video compilations and 11,700+ images" },
     ],
     stack: ["Next.js", "Supabase", "Seedream", "Seedance", "Kling", "ffmpeg", "deck.gl", "Recharts", "Playwright"],
+    contributions: { commits: 788, prs: 249 },
   },
   {
     slug: "ilusalong24",
@@ -129,5 +148,6 @@ export const PROJECTS: Project[] = [
       { value: "9,600", label: "routes prerendered per build" },
     ],
     stack: ["Next.js", "Supabase", "next-intl", "Vercel"],
+    contributions: { commits: 436, prs: 141 },
   },
 ];
