@@ -47,9 +47,10 @@ npm run smoke       # 17 checks against http://localhost:3000
   per build and daily, never throws, and falls back to
   `lib/live/snapshot.json` (`npm run live:refresh` rewrites it). Commit/PR
   counts go live only with `GITHUB_TOKEN` (and a `repo` on the project).
-- GitHub activity: `lib/github/` (token GraphQL → public API →
-  committed `fallback.json`; never throws). Refresh the snapshot with the
-  curl in README.
+- GitHub activity: `lib/github/` (public profile API → GraphQL only with
+  `GITHUB_CALENDAR_TOKEN` → committed `fallback.json`; never throws). Never
+  feed the calendar `GITHUB_TOKEN`: it is repo-scoped and undercounts.
+  Refresh the snapshot with the curl in README.
 - Design: dark single theme locked in `app/globals.css` (one accent,
   `--heat-*` scale for the heatmap, sharp corners). No em or en dashes in
   any user-visible text. No new dependencies without need.

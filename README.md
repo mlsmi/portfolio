@@ -23,11 +23,16 @@ npm run smoke      # post-build smoke check: npx tsx scripts/smoke.ts [url]
 
 `lib/github/fetch.ts` never throws. Source order:
 
-1. **GitHub GraphQL** when `GITHUB_TOKEN` is set (optional; no scopes needed
-   for what the public profile already shows).
-2. **Public contributions API** (`github-contributions-api.jogruber.de`),
+1. **Public contributions API** (`github-contributions-api.jogruber.de`),
    which mirrors the public profile. The profile includes private
-   contributions, so no token is required for the full picture.
+   contributions, so no token is required for the full picture, and the
+   site shows exactly the profile's number.
+2. **GitHub GraphQL**, only if the public API fails and only with
+   `GITHUB_CALENDAR_TOKEN` set (optional). GraphQL counts only what its
+   token can see, so it must be a token that sees every repo you contribute
+   to. It deliberately never uses `GITHUB_TOKEN`: that token is scoped to
+   the project repos for commit counts and would undercount by thousands
+   (it showed 9,587 instead of 14,769).
 3. **`lib/github/fallback.json`**, a committed snapshot, so the page builds
    and revalidates even with every network path down. Refresh it with:
    `curl -s 'https://github-contributions-api.jogruber.de/v4/mlsmi?y=last' > lib/github/fallback.json`
@@ -78,8 +83,8 @@ marsrally, agi, airdropstop, aiwizard, buybitcoinsmart →
 `mlsmi/buybtcsmart`, ilusalong24 → `mlsmi/ilukliinikud`; the token needs
 exactly these six repos). To cover AI Angels or its admin dashboard, add
 `repo: "owner/name"` to that project (and a `GITHUB_TOKEN_<OWNER>` if
-the repo lives under an organisation). The same token also serves the
-contribution heatmap (GraphQL).
+the repo lives under an organisation). This token is not used for the
+contribution heatmap (see "GitHub activity data").
 
 ## Contact form
 

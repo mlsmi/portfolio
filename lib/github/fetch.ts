@@ -86,8 +86,10 @@ type GraphQlResponse = {
 };
 
 /**
- * Preferred when GITHUB_TOKEN is set: first-party, and the token's own view
- * of the calendar. No scopes are needed for what the public profile shows.
+ * First-party, but only the token's own view of the calendar: contributions
+ * in repos the token cannot see drop out. A repo-scoped token (like the
+ * GITHUB_TOKEN used for the project cards' commit counts) undercounts by
+ * thousands, so this runs only as a fallback, with its own token.
  */
 async function fetchGraphQl(token: string): Promise<ContributionData | null> {
   const query = `query { user(login: "${GITHUB_LOGIN}") { contributionsCollection { contributionCalendar { totalContributions weeks { contributionDays { date contributionCount contributionLevel } } } } } }`;
@@ -115,12 +117,21 @@ async function fetchGraphQl(token: string): Promise<ContributionData | null> {
 }
 
 /**
- * Never throws and never returns malformed data: token source first when
- * configured, then the public API, then the committed snapshot — so the
- * page builds and revalidates even with every network path down.
+ * Never throws and never returns malformed data. The public API comes
+ * first: it is exactly what the profile shows, private contributions
+ * included. Then GraphQL, only with a dedicated GITHUB_CALENDAR_TOKEN
+ * (never GITHUB_TOKEN, which is scoped to a few repos and would undercount),
+ * then the committed snapshot, so the page builds and revalidates even
+ * with every network path down.
  */
 export async function getGitHubActivity(): Promise<ActivityResult> {
-  const token = process.env.GITHUB_TOKEN;
+  try {
+    const data = await fetchPublic();
+    if (data) return { data, source: "live" };
+  } catch {
+    // fall through
+  }
+  const token = process.env.GITHUB_CALENDAR_TOKEN;
   if (token) {
     try {
       const data = await fetchGraphQl(token);
@@ -128,12 +139,6 @@ export async function getGitHubActivity(): Promise<ActivityResult> {
     } catch {
       // fall through
     }
-  }
-  try {
-    const data = await fetchPublic();
-    if (data) return { data, source: "live" };
-  } catch {
-    // fall through
   }
   return { data: FALLBACK, source: "fallback" };
 }
