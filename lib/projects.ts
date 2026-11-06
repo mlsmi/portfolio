@@ -149,7 +149,8 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude", "Firecrawl", "Vercel crons"],
     lead: true,
-    contributions: { commits: 555, prs: 111 },
+    contributions: { commits: 564, prs: 113 },
+    repo: "mlsmi/aiwizard",
   },
   {
     slug: "agi",
@@ -182,7 +183,8 @@ export const PROJECTS: Project[] = [
       { value: "~140/day", label: "Google clicks three months after relaunch, zero paid SEO" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "Claude", "i18n"],
-    contributions: { commits: 2676, prs: 146 },
+    contributions: { commits: 2702, prs: 149 },
+    repo: "mlsmi/buybtcsmart",
   },
   {
     slug: "airdropstop",

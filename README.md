@@ -74,9 +74,11 @@ GitHub token; without one the snapshot in `lib/projects.ts` stands.
    `acme-labs/...`).
 
 Each project with a `repo` in `lib/projects.ts` is refreshed (mapped:
-marsrally, agi, airdropstop, ilusalong24 → `mlsmi/ilukliinikud`). To
-cover aiwizard, buybitcoinsmart, AI Angels or its admin dashboard, add
-`repo: "owner/name"` to that project. The same token also serves the
+marsrally, agi, airdropstop, aiwizard, buybitcoinsmart →
+`mlsmi/buybtcsmart`, ilusalong24 → `mlsmi/ilukliinikud`; the token needs
+exactly these six repos). To cover AI Angels or its admin dashboard, add
+`repo: "owner/name"` to that project (and a `GITHUB_TOKEN_<OWNER>` if
+the repo lives under an organisation). The same token also serves the
 contribution heatmap (GraphQL).
 
 ## Contact form
