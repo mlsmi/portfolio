@@ -1,4 +1,11 @@
-export type ProjectMetric = { value: string; label: string };
+import type { LiveKey } from "@/lib/live/keys";
+
+/**
+ * A static fact (`value`) or a live number (`live`, refreshed from the
+ * project's own site by lib/live). Labels may carry `{key}` tokens, filled
+ * with live numbers the same way.
+ */
+export type ProjectMetric = { label: string; value?: string; live?: LiveKey };
 
 export type Project = {
   slug: string;
@@ -10,8 +17,10 @@ export type Project = {
   /** 2-3 headline metrics, mono value + short label. */
   metrics: ProjectMetric[];
   stack: string[];
-  /** The owner's own commits (default branch) and PRs opened. */
+  /** The owner's own commits (default branch) and PRs opened: the snapshot lib/live refreshes. */
   contributions: { commits: number; prs: number };
+  /** GitHub repo ("owner/name") for live commit and PR counts; unset keeps the snapshot. */
+  repo?: string;
   /** Set for team projects, shown under the name; absent means solo. */
   role?: string;
   /** Natural image size when not 1600x1000; lead cards show it uncropped. */
@@ -29,12 +38,16 @@ export function projectImage(slug: string): string {
 }
 
 /**
- * Facts verified against each project's repository (2026-11). Metrics use
- * floors ("5,700+", "~800") so routine growth never makes them wrong.
+ * Facts verified against each project's repository (2026-11). Countable
+ * metrics are `live`: lib/live reads them from each site's own public files
+ * on every build and daily revalidation, falling back to
+ * lib/live/snapshot.json. Static values that can grow use floors ("~800").
  *
- * `contributions` is a snapshot from GitHub search on 2026-11-02: commits
- * on the default branch authored as mlsmi, and PRs opened by mlsmi. The
- * refresh queries are in README.md.
+ * `contributions` is a snapshot from GitHub search (2026-11-06 for projects
+ * with a `repo`, 2026-11-02 otherwise): commits on the default branch
+ * authored as mlsmi, and PRs opened by mlsmi. With GITHUB_TOKEN set,
+ * lib/live/contributions.ts refreshes them for every project with a
+ * `repo`. The queries are in README.md.
  */
 export const PROJECTS: Project[] = [
   {
@@ -49,7 +62,8 @@ export const PROJECTS: Project[] = [
       { value: "1080p", label: "replays rendered to video in the browser" },
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "WebCodecs", "Supabase", "Solana"],
-    contributions: { commits: 1771, prs: 355 },
+    contributions: { commits: 1816, prs: 366 },
+    repo: "mlsmi/marsrally",
     lead: true,
     youtubeId: "jlMZbIT5BWo",
   },
@@ -62,7 +76,7 @@ export const PROJECTS: Project[] = [
     imageSize: { width: 1600, height: 1122 },
     role: "Engineering lead, 3-person team",
     metrics: [
-      { value: "566", label: "AI companions with streaming chat and voice, some with their own Telegram bot" },
+      { live: "aiangels.companions", label: "AI companions with streaming chat and voice, some with their own Telegram bot" },
       { value: "132,000", label: "pages indexed by Google" },
       { value: "~4,000", label: "Google clicks a day" },
     ],
@@ -121,9 +135,9 @@ export const PROJECTS: Project[] = [
       "AI tools directory where an LLM pipeline researches, writes and fact-checks every listing, and tool owners verify themselves with an embedded badge.",
     url: "https://www.aiwizard.ai",
     metrics: [
-      { value: "10,000+", label: "tools reviewed and categorized" },
-      { value: "1,000+", label: "categories in a two-level tree" },
-      { value: "12,000", label: "pages prerendered on every build, no ISR" },
+      { live: "aiwizard.tools", label: "tools reviewed and categorized" },
+      { live: "aiwizard.categories", label: "categories in a two-level tree" },
+      { live: "aiwizard.pages", label: "pages in the sitemap, all prerendered on every build, no ISR" },
     ],
     highlights: [
       "Badge verification: owners embed a badge, an automatic check confirms it (rendering JavaScript-built sites when needed), and a daily cron re-checks every verified tool; two misses unverify",
@@ -135,7 +149,8 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude", "Firecrawl", "Vercel crons"],
     lead: true,
-    contributions: { commits: 555, prs: 111 },
+    contributions: { commits: 564, prs: 113 },
+    repo: "mlsmi/aiwizard",
   },
   {
     slug: "agi",
@@ -150,6 +165,7 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "Solana", "Metaplex", "Drizzle", "Neon", "Redis"],
     contributions: { commits: 2217, prs: 392 },
+    repo: "mlsmi/agi",
   },
   {
     slug: "buybitcoinsmart",
@@ -158,16 +174,17 @@ export const PROJECTS: Project[] = [
       "How to buy bitcoin in every country on earth, with a Claude-powered assistant and refuter-checked translations in ten languages.",
     url: "https://www.buybitcoinsmart.com",
     metrics: [
-      { value: "50,000", label: "programmatic pages in 10 languages" },
+      { live: "bbs.pages", label: "programmatic pages in {bbs.languages} languages" },
       {
-        value: "22",
+        live: "bbs.types",
         label:
-          "page types: country guides, payment methods per country, exchange-by-country pages, 659 comparisons, wallet hubs, US states, tax and licence guides",
+          "page types: country guides, payment methods per country, exchange-by-country pages, {bbs.comparisons} comparisons, wallet hubs, US states, tax and licence guides",
       },
       { value: "~140/day", label: "Google clicks three months after relaunch, zero paid SEO" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "Claude", "i18n"],
-    contributions: { commits: 2676, prs: 146 },
+    contributions: { commits: 2702, prs: 149 },
+    repo: "mlsmi/buybtcsmart",
   },
   {
     slug: "airdropstop",
@@ -176,11 +193,13 @@ export const PROJECTS: Project[] = [
       "Crypto airdrop directory rebuilt from a lost database, where an AI pipeline sources every fact to a quote.",
     url: "https://www.airdropstop.com",
     metrics: [
-      { value: "317", label: "verified listings" },
+      { live: "airdropstop.tracked", label: "airdrops tracked, each status checked against the project's own pages" },
+      { live: "airdropstop.live", label: "live right now" },
       { value: "0", label: "databases: the repo is the CMS" },
     ],
     stack: ["Next.js", "Tailwind", "Firecrawl", "Claude"],
-    contributions: { commits: 272, prs: 15 },
+    contributions: { commits: 327, prs: 21 },
+    repo: "mlsmi/airdropstop",
   },
   {
     slug: "ilusalong24",
@@ -188,11 +207,12 @@ export const PROJECTS: Project[] = [
     pitch: "Estonia's beauty clinic directory, prerendered in four languages with hand-tuned grammar for each.",
     url: "https://ilusalong24.ee",
     metrics: [
-      { value: "400+", label: "editor-checked salons across 10 service categories" },
+      { live: "ilusalong.salons", label: "editor-checked salons in {ilusalong.towns} towns" },
       { value: "4", label: "languages with hand-authored place-name grammar" },
       { value: "9,600", label: "routes prerendered per build" },
     ],
     stack: ["Next.js", "Supabase", "next-intl", "Vercel"],
     contributions: { commits: 436, prs: 141 },
+    repo: "mlsmi/ilukliinikud",
   },
 ];

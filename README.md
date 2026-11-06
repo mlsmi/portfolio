@@ -32,6 +32,55 @@ npm run smoke      # post-build smoke check: npx tsx scripts/smoke.ts [url]
    and revalidates even with every network path down. Refresh it with:
    `curl -s 'https://github-contributions-api.jogruber.de/v4/mlsmi?y=last' > lib/github/fallback.json`
 
+## Live project numbers
+
+The countable numbers on the project cards (tools, airdrops, pages,
+salons, companions) are read from each project's own public files, so
+they stay current without hand edits. `lib/live/` fetches them in the page
+render: on every build, and again with the page's daily revalidation.
+**No environment variables are needed for these.**
+
+| Project | Numbers | Source |
+| --- | --- | --- |
+| AirdropStop | airdrops tracked, live now | `llms.txt` summary line |
+| aiwizard | tools; categories and pages | `llms-full.txt`; `sitemap.xml` |
+| buybitcoinsmart | pages, page types, languages, comparisons | the base-language sitemaps of its sitemap index (hreflang alternates count every language) |
+| Ilusalong24 | salons, towns | the homepage stats strip |
+| AI Angels | companions | `/chat/<slug>` pages in its sitemaps |
+
+Fallbacks: every number starts as the committed `lib/live/snapshot.json`
+and is replaced only by a plausible live value (near the snapshot), so a
+site being down or changing its format never breaks the build or shows a
+wrong number. `npm run live:refresh` re-reads every source and rewrites the
+snapshot (`-- --check` only prints). Google figures (indexed pages, clicks a
+day) have no public source and stay hand-edited in `lib/projects.ts`.
+
+In `lib/projects.ts` a metric is either static (`value`) or live
+(`live: "aiwizard.tools"`), and labels can carry tokens like
+`{bbs.languages}`.
+
+### Live commit and PR counts (needs a token)
+
+The repos are private, so live commit and PR counts need a read-only
+GitHub token; without one the snapshot in `lib/projects.ts` stands.
+
+1. github.com → Settings → Developer settings → Fine-grained tokens →
+   Generate. Resource owner: `mlsmi`. Repository access: the project repos.
+   Permissions (read-only): **Contents**, **Pull requests**, **Metadata**.
+2. Vercel → portfolio → Settings → Environment Variables: add
+   `GITHUB_TOKEN` (Production and Preview), then redeploy.
+3. A fine-grained token covers one owner. For repos under an organisation
+   add `GITHUB_TOKEN_<OWNER>` too (e.g. `GITHUB_TOKEN_ACME_LABS` for
+   `acme-labs/...`).
+
+Each project with a `repo` in `lib/projects.ts` is refreshed (mapped:
+marsrally, agi, airdropstop, aiwizard, buybitcoinsmart →
+`mlsmi/buybtcsmart`, ilusalong24 → `mlsmi/ilukliinikud`; the token needs
+exactly these six repos). To cover AI Angels or its admin dashboard, add
+`repo: "owner/name"` to that project (and a `GITHUB_TOKEN_<OWNER>` if
+the repo lives under an organisation). The same token also serves the
+contribution heatmap (GraphQL).
+
 ## Contact form
 
 `/api/contact` sends through Resend when configured and **answers 503
@@ -106,12 +155,13 @@ back to a static state in browsers without `animation-timeline`.
 ## Content
 
 All copy and data live in `lib/site-config.ts`, `lib/projects.ts` and
-`lib/skills.ts`. Project metrics are floors ("10,000+", "400+") checked
-against each live site, so routine growth never makes them wrong.
+`lib/skills.ts`. Countable project metrics are live (see "Live project
+numbers"); static ones that can grow use floors ("~800").
 
 Each card's commit and PR counts (`contributions` in `lib/projects.ts`)
-are a snapshot. Refresh them per repo with GitHub search (default-branch
-commits authored by mlsmi, and PRs opened by mlsmi):
+are a snapshot, refreshed live when a token is set (see "Live project
+numbers"). The queries (default-branch commits authored by mlsmi, and PRs
+opened by mlsmi) also work by hand:
 
 ```bash
 gh api -X GET search/commits -f q='repo:mlsmi/marsrally author:mlsmi' --jq .total_count

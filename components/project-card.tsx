@@ -2,7 +2,10 @@ import Image from "next/image";
 
 import { CardDetails } from "@/components/card-details";
 import { DemoVideo } from "@/components/demo-video";
-import { projectImage, type Project } from "@/lib/projects";
+import type { ShownProject } from "@/lib/live";
+import { projectImage } from "@/lib/projects";
+
+type Project = ShownProject;
 
 function host(url: string): string {
   return new URL(url).host.replace(/^www\./, "");

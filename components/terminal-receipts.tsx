@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 
 import { ArmOnView } from "@/components/arm-on-view";
-import { PROJECTS } from "@/lib/projects";
+import type { Project } from "@/lib/projects";
 import { SITE } from "@/lib/site-config";
 
 type Line = { kind: "cmd" | "cont" | "out" | "note"; text: string };
@@ -16,16 +16,16 @@ const NEXT_PAUSE_MS = 520;
  *
  * The receipts behind "Commit and PR counts are mine": the README's own
  * GitHub search queries for Mars Rally with their results, and the totals
- * across every project. All numbers come from lib/projects.ts, the same
- * snapshot the cards show. Commands type out in monospace steps when the
+ * across every project. The numbers are the same ones the cards show
+ * (lib/live: live from GitHub with a token, else the committed snapshot). Commands type out in monospace steps when the
  * panel first scrolls into view (ArmOnView); without JS or with reduced
  * motion everything is simply shown.
  */
-export function TerminalReceipts() {
-  const mars = PROJECTS.find((p) => p.slug === "marsrally");
+export function TerminalReceipts({ projects }: { projects: Pick<Project, "slug" | "contributions">[] }) {
+  const mars = projects.find((p) => p.slug === "marsrally");
   const repo = `${SITE.handle}/marsrally`;
-  const commits = PROJECTS.reduce((sum, p) => sum + p.contributions.commits, 0);
-  const prs = PROJECTS.reduce((sum, p) => sum + p.contributions.prs, 0);
+  const commits = projects.reduce((sum, p) => sum + p.contributions.commits, 0);
+  const prs = projects.reduce((sum, p) => sum + p.contributions.prs, 0);
 
   const lines: Line[] = mars
     ? [
@@ -37,7 +37,7 @@ export function TerminalReceipts() {
         { kind: "out", text: String(mars.contributions.prs) },
         {
           kind: "note",
-          text: `# all ${PROJECTS.length} products: ${commits.toLocaleString("en-US")} commits, ${prs.toLocaleString("en-US")} PRs`,
+          text: `# all ${projects.length} products: ${commits.toLocaleString("en-US")} commits, ${prs.toLocaleString("en-US")} PRs`,
         },
       ]
     : [];

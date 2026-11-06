@@ -1,10 +1,14 @@
 import { ProjectCard } from "@/components/project-card";
 import { TerminalReceipts } from "@/components/terminal-receipts";
-import { PROJECTS } from "@/lib/projects";
+import type { ShownProject } from "@/lib/live";
+import { SNAPSHOT } from "@/lib/live/keys";
 
-export function ProjectsSection() {
-  const leads = PROJECTS.filter((p) => p.lead);
-  const rest = PROJECTS.filter((p) => !p.lead);
+const MONTH = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+
+/** Projects with their numbers resolved (lib/live), cards plus the receipts terminal. */
+export function ProjectsSection({ projects, contributionsLive }: { projects: ShownProject[]; contributionsLive: boolean }) {
+  const leads = projects.filter((p) => p.lead);
+  const rest = projects.filter((p) => !p.lead);
 
   return (
     <section id="work" aria-labelledby="work-heading" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
@@ -16,11 +20,12 @@ export function ProjectsSection() {
           <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted">
             Eight products in production. Six built solo, end to end. AI Angels and
             its admin dashboard: engineering lead of a three-person team. Commit
-            and PR counts are mine, from GitHub (November 2026).
+            and PR counts are mine, from GitHub
+            {contributionsLive ? ", refreshed daily" : ` (${MONTH.format(new Date(SNAPSHOT.date))})`}.
           </p>
         </div>
         <div className="min-w-0 lg:col-span-6">
-          <TerminalReceipts />
+          <TerminalReceipts projects={projects} />
         </div>
       </div>
       <div className="mt-12 space-y-6">

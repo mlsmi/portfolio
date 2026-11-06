@@ -6,14 +6,15 @@ import { ProjectsSection } from "@/components/projects-section";
 import { SkillsSection } from "@/components/skills-section";
 import { VelocityMarquee } from "@/components/velocity-marquee";
 import { getGitHubActivity } from "@/lib/github/fetch";
+import { getLiveProjects } from "@/lib/live";
 import { SITE, siteUrl } from "@/lib/site-config";
 import { MARQUEE_ROWS } from "@/lib/skills";
 
-/** The one ISR surface: refresh the GitHub data daily. */
+/** The one ISR surface: refresh the GitHub data and project numbers daily. */
 export const revalidate = 86400;
 
 export default async function Home() {
-  const activity = await getGitHubActivity();
+  const [activity, live] = await Promise.all([getGitHubActivity(), getLiveProjects()]);
 
   const personJsonLd = {
     "@context": "https://schema.org",
@@ -33,7 +34,7 @@ export default async function Home() {
       />
       <Hero />
       <GithubActivity activity={activity} />
-      <ProjectsSection />
+      <ProjectsSection projects={live.projects} contributionsLive={live.contributionsLive} />
       <VelocityMarquee rows={MARQUEE_ROWS} />
       <AiSection />
       <SkillsSection />

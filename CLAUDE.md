@@ -41,8 +41,12 @@ npm run smoke       # 17 checks against http://localhost:3000
 
 ## Where things live
 
-- All copy and data: `lib/site-config.ts`, `lib/projects.ts` (8 projects;
-  metrics are floors checked against the live sites), `lib/skills.ts`.
+- All copy and data: `lib/site-config.ts`, `lib/projects.ts` (8 projects),
+  `lib/skills.ts`. Countable project metrics are `live` (README "Live
+  project numbers"): `lib/live/` reads them from each site's public files
+  per build and daily, never throws, and falls back to
+  `lib/live/snapshot.json` (`npm run live:refresh` rewrites it). Commit/PR
+  counts go live only with `GITHUB_TOKEN` (and a `repo` on the project).
 - GitHub activity: `lib/github/` (token GraphQL → public API →
   committed `fallback.json`; never throws). Refresh the snapshot with the
   curl in README.

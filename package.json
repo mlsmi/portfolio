@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test 'lib/**/*.test.ts'",
     "capture": "tsx scripts/capture.ts",
-    "smoke": "tsx scripts/smoke.ts"
+    "smoke": "tsx scripts/smoke.ts",
+    "live:refresh": "tsx scripts/refresh-live.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
