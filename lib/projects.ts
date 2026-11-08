@@ -43,11 +43,12 @@ export function projectImage(slug: string): string {
  * on every build and daily revalidation, falling back to
  * lib/live/snapshot.json. Static values that can grow use floors ("~800").
  *
- * `contributions` is a snapshot from GitHub search (2026-11-06 for projects
- * with a `repo`, 2026-11-02 otherwise): commits on the default branch
- * authored as mlsmi, and PRs opened by mlsmi. With GITHUB_TOKEN set,
- * lib/live/contributions.ts refreshes them for every project with a
- * `repo`. The queries are in README.md.
+ * `contributions` is a snapshot from GitHub search. For the six solo
+ * projects with a `repo` (2026-11-08): whole-repo totals, every commit on
+ * the default branch (AI agent commits included) and every PR, matching
+ * each repo's own counters; with GITHUB_TOKEN set,
+ * lib/live/contributions.ts refreshes them. For the AI Angels team repos
+ * (2026-11-02, no `repo`): mlsmi's own commits and PRs only.
  */
 export const PROJECTS: Project[] = [
   {
@@ -62,7 +63,7 @@ export const PROJECTS: Project[] = [
       { value: "1080p", label: "replays rendered to video in the browser" },
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "WebCodecs", "Supabase", "Solana"],
-    contributions: { commits: 1816, prs: 366 },
+    contributions: { commits: 2062, prs: 374 },
     repo: "mlsmi/marsrally",
     lead: true,
     youtubeId: "jlMZbIT5BWo",
@@ -149,7 +150,7 @@ export const PROJECTS: Project[] = [
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "DeepSeek", "Claude", "Firecrawl", "Vercel crons"],
     lead: true,
-    contributions: { commits: 564, prs: 113 },
+    contributions: { commits: 591, prs: 113 },
     repo: "mlsmi/aiwizard",
   },
   {
@@ -164,7 +165,7 @@ export const PROJECTS: Project[] = [
       { value: "24", label: "regions with ~20 modelled landmarks, 64 players per shared world" },
     ],
     stack: ["Next.js", "Three.js", "Colyseus", "Solana", "Metaplex", "Drizzle", "Neon", "Redis"],
-    contributions: { commits: 2217, prs: 392 },
+    contributions: { commits: 2501, prs: 392 },
     repo: "mlsmi/agi",
   },
   {
@@ -183,7 +184,7 @@ export const PROJECTS: Project[] = [
       { value: "~140/day", label: "Google clicks three months after relaunch, zero paid SEO" },
     ],
     stack: ["Next.js", "Tailwind", "Supabase", "Claude", "i18n"],
-    contributions: { commits: 2702, prs: 149 },
+    contributions: { commits: 2702, prs: 150 },
     repo: "mlsmi/buybtcsmart",
   },
   {
@@ -198,7 +199,7 @@ export const PROJECTS: Project[] = [
       { value: "0", label: "databases: the repo is the CMS" },
     ],
     stack: ["Next.js", "Tailwind", "Firecrawl", "Claude"],
-    contributions: { commits: 327, prs: 21 },
+    contributions: { commits: 329, prs: 22 },
     repo: "mlsmi/airdropstop",
   },
   {
@@ -212,7 +213,7 @@ export const PROJECTS: Project[] = [
       { value: "9,600", label: "routes prerendered per build" },
     ],
     stack: ["Next.js", "Supabase", "next-intl", "Vercel"],
-    contributions: { commits: 436, prs: 141 },
+    contributions: { commits: 630, prs: 141 },
     repo: "mlsmi/ilukliinikud",
   },
 ];

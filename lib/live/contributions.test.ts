@@ -42,7 +42,7 @@ describe("live commit and PR counts", () => {
     assert.deepEqual(r.bySlug["mlsmi/marsrally"], { commits: 1816, prs: 366 });
   });
 
-  it("reads commits and PRs with the token, per the README queries", async () => {
+  it("reads whole-repo commit and PR totals with the token", async () => {
     process.env.GITHUB_TOKEN = "user-token";
     const calls = stub((url) => ({ total: url.includes("/search/commits") ? 1900 : 380 }));
     const r = await getLiveContributions([project("mlsmi/marsrally", 1816, 366), project(undefined, 5, 1)]);
@@ -52,7 +52,8 @@ describe("live commit and PR counts", () => {
     assert.equal(calls.length, 2);
     assert.ok(calls.every((c) => c.auth === "Bearer user-token"));
     const queries = calls.map((c) => decodeURIComponent(new URL(c.url).searchParams.get("q") ?? ""));
-    assert.deepEqual(queries.sort(), ["repo:mlsmi/marsrally author:mlsmi", "repo:mlsmi/marsrally is:pr author:mlsmi"]);
+    // Whole-repo totals, matching the repo page (agent commits included).
+    assert.deepEqual(queries.sort(), ["repo:mlsmi/marsrally author-date:>1970-01-01", "repo:mlsmi/marsrally is:pr"]);
   });
 
   it("uses GITHUB_TOKEN_<OWNER> for repos under another owner", async () => {

@@ -1,5 +1,4 @@
 import type { Project } from "@/lib/projects";
-import { SITE } from "@/lib/site-config";
 
 const REVALIDATE_SECONDS = 86400;
 const TIMEOUT_MS = 12000;
@@ -36,10 +35,23 @@ async function totalCount(endpoint: "commits" | "issues", q: string, token: stri
 const plausible = (n: number | null, snapshot: number): n is number => n !== null && n >= snapshot * 0.9;
 
 /**
- * Commit and PR counts per project, the README's own queries: commits on
- * the default branch authored by the owner, and PRs opened by the owner.
- * Needs a token (the repos are private); without one, or for projects
- * with no `repo`, the committed snapshot stands. Never throws.
+ * Every commit on the default branch: what the repo page's "Commits"
+ * counter shows. Commit search needs a search term, and an all-time date
+ * range matches every commit. This deliberately counts the whole history,
+ * not only commits authored as the owner: commits made by AI agents
+ * (Claude Code, Cursor Agent) carry the agents' identities, and GitHub
+ * does not credit them to the owner's account.
+ */
+export const commitQuery = (repo: string) => `repo:${repo} author-date:>1970-01-01`;
+
+/** Every pull request in the repo. */
+export const prQuery = (repo: string) => `repo:${repo} is:pr`;
+
+/**
+ * Commit and PR totals per project, matching each repo's own counters on
+ * GitHub (the terminal on the page types the same queries). Needs a token
+ * (the repos are private); without one, or for projects with no `repo`,
+ * the committed snapshot stands. Never throws.
  */
 export async function getLiveContributions(
   projects: Pick<Project, "slug" | "repo" | "contributions">[],
@@ -54,8 +66,8 @@ export async function getLiveContributions(
       if (!token) return;
       try {
         const [commits, prs] = await Promise.all([
-          totalCount("commits", `repo:${project.repo} author:${SITE.handle}`, token),
-          totalCount("issues", `repo:${project.repo} is:pr author:${SITE.handle}`, token),
+          totalCount("commits", commitQuery(project.repo), token),
+          totalCount("issues", prQuery(project.repo), token),
         ]);
         const commitsOk = plausible(commits, project.contributions.commits);
         const prsOk = plausible(prs, project.contributions.prs);

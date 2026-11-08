@@ -46,7 +46,10 @@ npm run smoke       # 17 checks against http://localhost:3000
   project numbers"): `lib/live/` reads them from each site's public files
   per build and daily, never throws, and falls back to
   `lib/live/snapshot.json` (`npm run live:refresh` rewrites it). Commit/PR
-  counts go live only with `GITHUB_TOKEN` (and a `repo` on the project).
+  counts go live only with `GITHUB_TOKEN` (and a `repo` on the project);
+  they are whole-repo totals matching each repo page (AI agent commits
+  included), via `commitQuery`/`prQuery` in `lib/live/contributions.ts`,
+  which the Work terminal also types.
 - GitHub activity: `lib/github/` (public profile API → GraphQL only with
   `GITHUB_CALENDAR_TOKEN` → committed `fallback.json`; never throws). Never
   feed the calendar `GITHUB_TOKEN`: it is repo-scoped and undercounts.
