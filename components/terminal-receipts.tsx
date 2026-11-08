@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
 import { ArmOnView } from "@/components/arm-on-view";
+import { commitQuery, prQuery } from "@/lib/live/contributions";
 import type { Project } from "@/lib/projects";
 import { SITE } from "@/lib/site-config";
 
@@ -30,10 +31,12 @@ export function TerminalReceipts({ projects }: { projects: Pick<Project, "slug" 
   const lines: Line[] = mars
     ? [
         { kind: "cmd", text: "gh api -X GET search/commits \\" },
-        { kind: "cont", text: `    -f q='repo:${repo} author:${SITE.handle}' --jq .total_count` },
+        { kind: "cont", text: `    -f q='${commitQuery(repo)}' \\` },
+        { kind: "cont", text: "    --jq .total_count" },
         { kind: "out", text: String(mars.contributions.commits) },
         { kind: "cmd", text: "gh api -X GET search/issues \\" },
-        { kind: "cont", text: `    -f q='repo:${repo} is:pr author:${SITE.handle}' --jq .total_count` },
+        { kind: "cont", text: `    -f q='${prQuery(repo)}' \\` },
+        { kind: "cont", text: "    --jq .total_count" },
         { kind: "out", text: String(mars.contributions.prs) },
         {
           kind: "note",

@@ -66,8 +66,9 @@ In `lib/projects.ts` a metric is either static (`value`) or live
 
 ### Live commit and PR counts (needs a token)
 
-The repos are private, so live commit and PR counts need a read-only
-GitHub token; without one the snapshot in `lib/projects.ts` stands.
+The repos are private, so live commit and PR counts (whole-repo totals,
+see "Content") need a read-only GitHub token; without one the snapshot in
+`lib/projects.ts` stands.
 
 1. github.com → Settings → Developer settings → Fine-grained tokens →
    Generate. Resource owner: `mlsmi`. Repository access: the project repos.
@@ -165,10 +166,14 @@ numbers"); static ones that can grow use floors ("~800").
 
 Each card's commit and PR counts (`contributions` in `lib/projects.ts`)
 are a snapshot, refreshed live when a token is set (see "Live project
-numbers"). The queries (default-branch commits authored by mlsmi, and PRs
-opened by mlsmi) also work by hand:
+numbers"). For the six solo projects they are whole-repo totals, matching
+each repo page's counters: every commit on the default branch and every
+PR. That deliberately includes commits made by AI agents (Claude Code,
+Cursor Agent), which carry the agents' identities and are not credited to
+mlsmi (`author:mlsmi` alone gave Mars Rally 1,850 of its 2,062). The AI
+Angels team repos keep mlsmi's own share. The queries also work by hand:
 
 ```bash
-gh api -X GET search/commits -f q='repo:mlsmi/marsrally author:mlsmi' --jq .total_count
-gh api -X GET search/issues -f q='repo:mlsmi/marsrally is:pr author:mlsmi' --jq .total_count
+gh api -X GET search/commits -f q='repo:mlsmi/marsrally author-date:>1970-01-01' --jq .total_count
+gh api -X GET search/issues -f q='repo:mlsmi/marsrally is:pr' --jq .total_count
 ```

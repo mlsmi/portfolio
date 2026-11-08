@@ -20,8 +20,10 @@ export function ProjectsSection({ projects, contributionsLive }: { projects: Sho
           <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-muted">
             Eight products in production. Six built solo, end to end. AI Angels and
             its admin dashboard: engineering lead of a three-person team. Commit
-            and PR counts are mine, from GitHub
-            {contributionsLive ? ", refreshed daily" : ` (${MONTH.format(new Date(SNAPSHOT.date))})`}.
+            and PR counts come from GitHub
+            {contributionsLive ? ", refreshed daily" : ` (${MONTH.format(new Date(SNAPSHOT.date))})`}: full
+            repo history for my solo projects, agent commits included; my own
+            share on the AI Angels team repos.
           </p>
         </div>
         <div className="min-w-0 lg:col-span-6">
