@@ -21,7 +21,11 @@ npm run smoke      # post-build smoke check: npx tsx scripts/smoke.ts [url]
 
 ## GitHub activity data
 
-`lib/github/fetch.ts` never throws. Source order:
+`lib/github/fetch.ts` never throws. The headline ("contributions in the
+last year") is always the sum of the calendar's days, never a source's own
+total: the public API's `total.lastYear` lagged the calendar by a week at
+the Sunday rollover (14,943 against a day sum of 14,805, when the profile
+said 14,808). Source order:
 
 1. **Public contributions API** (`github-contributions-api.jogruber.de`),
    which mirrors the public profile. The profile includes private

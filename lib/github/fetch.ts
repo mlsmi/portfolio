@@ -27,26 +27,28 @@ function isDay(d: unknown): d is ContributionDay {
   );
 }
 
-/** A year of days, every one well-formed — anything less falls back. */
-function guard(data: { totalLastYear: unknown; days: unknown }): ContributionData | null {
-  const { totalLastYear, days } = data;
-  if (typeof totalLastYear !== "number" || !Array.isArray(days)) return null;
+/**
+ * A year of days, every one well-formed — anything less falls back. The
+ * headline total is the sum of these days, never a source's own total:
+ * the days are exactly the calendar GitHub draws (and counts) right now,
+ * while the public API's `total.lastYear` lagged it by a week at the
+ * Sunday rollover (14,943 against a day sum of 14,805 on 2026-11-08).
+ */
+function guard(days: unknown): ContributionData | null {
+  if (!Array.isArray(days)) return null;
   if (days.length < 300 || days.length > 400) return null;
   if (!days.every(isDay)) return null;
-  return { totalLastYear, days: days as ContributionDay[] };
+  const checked = days as ContributionDay[];
+  return { totalLastYear: checked.reduce((sum, d) => sum + d.count, 0), days: checked };
 }
 
 const FALLBACK: ContributionData = (() => {
-  const checked = guard({
-    totalLastYear: fallback.total.lastYear,
-    days: fallback.contributions,
-  });
+  const checked = guard(fallback.contributions);
   if (!checked) throw new Error("lib/github/fallback.json is malformed");
   return checked;
 })();
 
 type PublicApiResponse = {
-  total?: { lastYear?: unknown };
   contributions?: unknown;
 };
 
@@ -57,10 +59,7 @@ async function fetchPublic(): Promise<ContributionData | null> {
   });
   if (!res.ok) return null;
   const body = (await res.json()) as PublicApiResponse;
-  return guard({
-    totalLastYear: body.total?.lastYear,
-    days: body.contributions,
-  });
+  return guard(body.contributions);
 }
 
 const GRAPHQL_LEVELS: Record<string, ContributionDay["level"]> = {
@@ -77,7 +76,6 @@ type GraphQlResponse = {
     user?: {
       contributionsCollection?: {
         contributionCalendar?: {
-          totalContributions?: unknown;
           weeks?: { contributionDays?: GraphQlDay[] }[];
         };
       };
@@ -92,7 +90,7 @@ type GraphQlResponse = {
  * thousands, so this runs only as a fallback, with its own token.
  */
 async function fetchGraphQl(token: string): Promise<ContributionData | null> {
-  const query = `query { user(login: "${GITHUB_LOGIN}") { contributionsCollection { contributionCalendar { totalContributions weeks { contributionDays { date contributionCount contributionLevel } } } } } }`;
+  const query = `query { user(login: "${GITHUB_LOGIN}") { contributionsCollection { contributionCalendar { weeks { contributionDays { date contributionCount contributionLevel } } } } } }`;
   const res = await fetch("https://api.github.com/graphql", {
     method: "POST",
     next: { revalidate: REVALIDATE_SECONDS },
@@ -113,7 +111,7 @@ async function fetchGraphQl(token: string): Promise<ContributionData | null> {
       level: GRAPHQL_LEVELS[String(d.contributionLevel)] ?? 0,
     })),
   );
-  return guard({ totalLastYear: calendar.totalContributions, days });
+  return guard(days);
 }
 
 /**

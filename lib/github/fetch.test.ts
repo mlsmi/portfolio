@@ -17,7 +17,16 @@ function year(count: number) {
   }));
 }
 
-const PUBLIC = { total: { lastYear: 14769 }, contributions: year(40) };
+const sum = (days: { count: number }[]) => days.reduce((n, d) => n + d.count, 0);
+
+/**
+ * As the public API answered on 2026-11-08: its `total.lastYear` (14,943)
+ * still counted a week the calendar had already dropped; the 365 days it
+ * returned summed to 14,805, which is what the profile showed.
+ */
+const ROLLED_OVER = year(40);
+ROLLED_OVER[0].count += 205;
+const PUBLIC = { total: { lastYear: 14943 }, contributions: ROLLED_OVER };
 const GRAPHQL = {
   data: {
     user: {
@@ -56,8 +65,14 @@ describe("GitHub activity source order", () => {
     const hosts = stub({ publicUp: true, graphqlUp: true });
     const r = await getGitHubActivity();
     assert.equal(r.source, "live");
-    assert.equal(r.data.totalLastYear, 14769);
     assert.ok(!hosts.includes("api.github.com"));
+  });
+
+  it("shows the sum of the calendar's days, not the API's lagging total", async () => {
+    stub({ publicUp: true, graphqlUp: false });
+    const r = await getGitHubActivity();
+    assert.equal(sum(ROLLED_OVER), 14805);
+    assert.equal(r.data.totalLastYear, 14805);
   });
 
   it("never uses GITHUB_TOKEN for the calendar, even with the public API down", async () => {
@@ -66,7 +81,7 @@ describe("GitHub activity source order", () => {
     const hosts = stub({ publicUp: false, graphqlUp: true });
     const r = await getGitHubActivity();
     assert.equal(r.source, "fallback");
-    assert.equal(r.data.totalLastYear, fallback.total.lastYear);
+    assert.equal(r.data.totalLastYear, sum(fallback.contributions));
     assert.ok(!hosts.includes("api.github.com"));
   });
 
@@ -75,7 +90,8 @@ describe("GitHub activity source order", () => {
     stub({ publicUp: false, graphqlUp: true });
     const r = await getGitHubActivity();
     assert.equal(r.source, "token");
-    assert.equal(r.data.totalLastYear, 9587);
+    // The day sum, not GraphQL's own total (9,587 in the stub).
+    assert.equal(r.data.totalLastYear, 365 * 26);
   });
 
   it("serves the committed snapshot with every source down", async () => {
