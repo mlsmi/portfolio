@@ -7,10 +7,11 @@ export type ContributionDay = {
 
 export type ContributionData = {
   /**
-   * GitHub's own "contributions in the last year" figure. Its window is the
-   * full 53-week calendar, slightly wider than the 365 `days`, so it can
-   * exceed the sum of `days` — display this one, derive everything else
-   * from the days.
+   * The sum of `days`: exactly the calendar GitHub draws, and what its
+   * profile headline "contributions in the last year" counts. A source's
+   * own total is never used: the public API's lagged the calendar by a
+   * week at the Sunday rollover (14,943 against a day sum of 14,805 on
+   * 2026-11-08, when the profile said 14,808).
    */
   totalLastYear: number;
   /** Oldest first. */
